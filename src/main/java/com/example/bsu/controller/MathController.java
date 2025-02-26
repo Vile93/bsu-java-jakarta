@@ -24,7 +24,7 @@ public class MathController extends HttpServlet {
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
-        String jsonResponse = String.format("{ number: %f }", number);
+        String jsonResponse = String.format("{ \"number\": %f }", number);
         out.print(jsonResponse);
         out.flush();
     }

@@ -1,1 +1,1 @@
-export const API = 'http://localhost:8080'
+const API = 'http://localhost:8080/app'
