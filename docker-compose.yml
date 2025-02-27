@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: tomcat-java-2
+    container_name: tomcat-java-3
     restart: 'no'
     ports:
       - "8080:8080"

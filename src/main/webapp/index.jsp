@@ -3,10 +3,10 @@
 <html>
 <head>
     <title>BSU JAVA JAKARTA</title>
-    <link rel="stylesheet" href="views/dist/assets/index-C5owt9St.css">
+<%--    <link rel="stylesheet" href="views/dist/index.css">--%>
 </head>
 <body>
 <div id="root"></div>
-<script src="views/dist/assets/index-FjUk24pa.js"></script>
+<%--<script src="views/dist/index.js"></script>--%>
 </body>
 </html>
