@@ -1,26 +1,25 @@
-package com.example.bsu.controller;
+package com.example.bsu.controller.MathController;
 
-import com.example.bsu.model.MathData;
+import com.example.bsu.service.MathService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Logger;
 
-@WebServlet("/math/*")
-
+@WebServlet("/api/math/*")
 public class MathController extends HttpServlet {
     private void doCompute(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
-        MathData mathData = mapper.readValue(req.getReader(), MathData.class);
-        MathResponse mathResponse = new MathResponse(mathData.getNumber());
-        double number = mathResponse.getTwice();
-
+        MathRequest mathRequest = mapper.readValue(req.getReader(), MathRequest.class);
+        MathService mathService = new MathService();
+        double number = mathService.getTwice(mathRequest.getNumber());
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
@@ -28,13 +27,10 @@ public class MathController extends HttpServlet {
         out.print(jsonResponse);
         out.flush();
     }
-    public static  final Logger logger = Logger.getLogger(MathController.class.getName());
 
     @Override
     protected  void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String path = req.getPathInfo();
-        logger.info(path);
-        System.out.println(path);
        if("/twice".equals(path)) {
            doCompute(req,res);
        } else {

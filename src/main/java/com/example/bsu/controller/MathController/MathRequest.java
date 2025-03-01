@@ -1,6 +1,6 @@
-package com.example.bsu.model;
+package com.example.bsu.controller.MathController;
 
-public class MathData {
+public class MathRequest {
     private double number;
 
     public double getNumber() { return number; }
