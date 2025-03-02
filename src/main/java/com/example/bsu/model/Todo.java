@@ -1,18 +1,19 @@
 package com.example.bsu.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "todos")
 public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
+    @Column(name = "title",nullable = false)
     private String title;
 
-    @Column(nullable = true)
+    @Column(name = "description",nullable = true)
     private String description;
 
 
@@ -20,11 +21,11 @@ public class Todo {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+
     public Todo() {}
-    public Todo(String title, String description, User user) {
+    public Todo(String title, String description) {
         this.title = title;
         this.description = description;
-        this.user = user;
     }
 
     public int getId() {

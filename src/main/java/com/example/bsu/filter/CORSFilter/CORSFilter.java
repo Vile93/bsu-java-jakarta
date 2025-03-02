@@ -1,5 +1,6 @@
 package com.example.bsu.filter.CORSFilter;
 
+import jakarta.annotation.Priority;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-
+@Priority(1)
 @WebFilter("/*")
 public class CORSFilter implements Filter {
 

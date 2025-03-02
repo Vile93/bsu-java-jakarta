@@ -9,17 +9,22 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./target/bsu-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/app.war
+      - tomcat_data:/usr/local/tomcat/logs
+    depends_on:
+      - db
   db:
       image: mariadb
       container_name: mariadb_container
       restart: always
       environment:
-          MARIADB_ROOT_PASSWORD: PASSWORD
-          MARIADB_DATABASE: bsu
+        - MYSQL_ROOT_PASSWORD=pass
+        - MYSQL_DATABASE=bsu
+        - MYSQL_USER=user
+        - MYSQL_PASSWORD=pass
       ports:
         - "3306:3306"
       volumes:
         - mariadb_data:/var/lib/mysql
 volumes:
   mariadb_data:
+  tomcat_data:

@@ -1,16 +1,23 @@
 package com.example.bsu.controller.AuthController;
 
+import com.example.bsu.model.User;
+import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.IOException;
 
 @WebServlet("/api/auth/*")
 public class AuthController extends HttpServlet {
+    private static final Logger logger = LogManager.getLogger();
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         AuthRequestLogin authRequestLogin = mapper.readValue(request.getReader(), AuthRequestLogin.class);
@@ -21,12 +28,19 @@ public class AuthController extends HttpServlet {
     }
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        User user = new User("admin", "admin", "admin");
+        session.save(user);
+        tx1.commit();
+        session.close();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getPathInfo();
-        System.out.println(path);
+        logger.info("doRegister " + path);
+        System.out.println(path + "Test");
         switch (path) {
             case "/login":
                 doLogin(request, response);

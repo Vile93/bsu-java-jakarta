@@ -1,15 +1,16 @@
 package com.example.bsu.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "sessions")
 public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(name = "session")
     private String session;
 
     @OneToOne
@@ -17,11 +18,6 @@ public class Session {
     private User user;
 
     public Session() {}
-
-    public Session(String session, User user) {
-        this.session = session;
-        this.user = user;
-    }
 
     public int getId() {
         return id;

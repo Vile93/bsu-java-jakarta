@@ -1,35 +1,34 @@
 package com.example.bsu.model;
 
-import jakarta.persistence.*;
-
-import java.awt.print.Book;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(unique=true, nullable=false)
+    @Column(name = "name",unique=true, nullable=false)
     private String name;
 
-    @Column(nullable=false)
+    @Column(name = "password",nullable=false)
     private String password;
 
-    @Column(nullable=false)
+    @Column(name = "email",nullable=false)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Todo> todos;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Session session;
+//    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
+//    private List<Todo> todos;
+//
+//    @OneToOne(mappedBy = "user_id", cascade = CascadeType.ALL)
+//    private Session session;
 
     public User() {}
 
-    public User(String name, String email,String password) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -67,20 +66,12 @@ public class User {
         this.email = email;
     }
 
-    public List<Todo> getTodos() {
-        return this.todos;
-    }
-
-    public void setTodos(List<Todo> todos) {
-        this.todos = todos;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
+//    public Session getSession() {
+//        return session;
+//    }
+//
+//    public void setSession(Session session) {
+//        this.session = session;
+//    }
 
 }
