@@ -1,42 +1,38 @@
 package com.example.bsu.dao;
 
-import com.example.bsu.model.Todo;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.util.List;
 
 
 public class UserDao {
     private static final Logger logger = LogManager.getLogger(UserDao.class);
+    public static User findByUsername(String username) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        User user = (User) session.createQuery("from User where name = :username", User.class).setParameter("username", username).uniqueResult();
+        session.close();
+        return user;
+    }
     public static  User findById(int id) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        try {
-            User user = (User) session.get(User.class, id);
-            tx.commit();
-            return user;
-        } catch (Exception e) {
-            tx.rollback();
-        } finally {
-            session.close();
-        }
-        return null;
+        User user = null;
+        user = (User) session.get(User.class, id);
+        session.close();
+        return user;
     }
     public static void save(User user) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
+        Transaction tx = null;
         try {
+            tx = session.beginTransaction();
             session.save(user);
             tx.commit();
-            logger.info("User found with id: ");
-        } catch (Exception e) {
-            logger.error("Error in findById", e);
-            tx.rollback();
+        } catch (HibernateException e) {
+            if(tx != null) tx.rollback();
         } finally {
             session.close();
         }

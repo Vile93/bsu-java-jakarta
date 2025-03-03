@@ -1,43 +1,33 @@
 package com.example.bsu.controller.AuthController;
 
-import com.example.bsu.model.Todo;
-import com.example.bsu.model.User;
-import com.example.bsu.service.UserService;
-import com.example.bsu.utils.HibernateSessionFactoryUtil;
+import com.example.bsu.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import java.io.IOException;
 
 @WebServlet("/api/auth/*")
 public class AuthController extends HttpServlet {
-    private static final Logger logger = LogManager.getLogger();
-    private void doLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        AuthRequestLogin authRequestLogin = mapper.readValue(request.getReader(), AuthRequestLogin.class);
-
+    private void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            AuthRequestLogin authRequestLogin = mapper.readValue(request.getReader(), AuthRequestLogin.class);
+            AuthService.login(request,response,authRequestLogin);
     }
-    private void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    private void doLogout(HttpServletRequest request, HttpServletResponse response) {
+            AuthService.logout(request,response);
     }
-    private void doRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = new User("admin", "admin", "admin");
-        UserService.create(user);
+    private void doRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
+            ObjectMapper mapper = new ObjectMapper();
+            AuthRequestRegister authRequestRegister = mapper.readValue(request.getReader(), AuthRequestRegister.class);
+            AuthService.register(request,response,authRequestRegister);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path = request.getPathInfo();
-        logger.info("doRegister " + path);
-        System.out.println(path + "Test");
         switch (path) {
             case "/login":
                 doLogin(request, response);
@@ -51,7 +41,6 @@ public class AuthController extends HttpServlet {
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
-
         }
     }
 }
