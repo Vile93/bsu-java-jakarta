@@ -1,6 +1,8 @@
 package com.example.bsu.controller.AuthController;
 
+import com.example.bsu.model.Todo;
 import com.example.bsu.model.User;
+import com.example.bsu.service.UserService;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -27,13 +29,8 @@ public class AuthController extends HttpServlet {
 
     }
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
         User user = new User("admin", "admin", "admin");
-        session.save(user);
-        tx1.commit();
-        session.close();
+        UserService.create(user);
     }
 
     @Override

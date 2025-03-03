@@ -4,7 +4,7 @@ import com.example.bsu.model.Session;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 
 public class SessionDao {
-    public Session findSession(int id) {
+    public Session findById(int id) {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().find(Session.class, id);
     }
     public void save(Session session) {

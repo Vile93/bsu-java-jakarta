@@ -18,14 +18,15 @@ public class Todo {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private User user;
 
 
     public Todo() {}
-    public Todo(String title, String description) {
+    public Todo(String title, String description, User user) {
         this.title = title;
         this.description = description;
+        this.user = user;
     }
 
     public int getId() {

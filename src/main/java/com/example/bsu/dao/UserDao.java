@@ -3,22 +3,48 @@ package com.example.bsu.dao;
 import com.example.bsu.model.Todo;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
 
 public class UserDao {
-
-    public User findById(int id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().find(User.class, id);
+    private static final Logger logger = LogManager.getLogger(UserDao.class);
+    public static  User findById(int id) {
+        Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            User user = (User) session.get(User.class, id);
+            tx.commit();
+            return user;
+        } catch (Exception e) {
+            tx.rollback();
+        } finally {
+            session.close();
+        }
+        return null;
     }
-    public void save(User user) {
-        HibernateSessionFactoryUtil.getSessionFactory().openSession().save(user);
+    public static void save(User user) {
+        Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = session.beginTransaction();
+        try {
+            session.save(user);
+            tx.commit();
+            logger.info("User found with id: ");
+        } catch (Exception e) {
+            logger.error("Error in findById", e);
+            tx.rollback();
+        } finally {
+            session.close();
+        }
     }
-    public void update(User user) {
+    public static void update(User user) {
         HibernateSessionFactoryUtil.getSessionFactory().openSession().update(user);
     }
-    public void delete(User user) {
+    public static  void delete(User user) {
         HibernateSessionFactoryUtil.getSessionFactory().openSession().delete(user);
     }
 }

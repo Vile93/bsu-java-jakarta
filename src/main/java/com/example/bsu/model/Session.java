@@ -14,10 +14,14 @@ public class Session {
     private String session;
 
     @OneToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false,referencedColumnName = "id")
     private User user;
 
     public Session() {}
+    public Session(String session, User user) {
+        this.session = session;
+        this.user = user;
+    }
 
     public int getId() {
         return id;
