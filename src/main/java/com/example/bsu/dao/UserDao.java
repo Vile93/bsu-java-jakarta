@@ -38,9 +38,29 @@ public class UserDao {
         }
     }
     public static void update(User user) {
-        HibernateSessionFactoryUtil.getSessionFactory().openSession().update(user);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(user);
+            tx.commit();
+        } catch (HibernateException e) {
+            if(tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
     }
     public static  void delete(User user) {
-        HibernateSessionFactoryUtil.getSessionFactory().openSession().delete(user);
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(user);
+            tx.commit();
+        } catch (HibernateException e) {
+            if(tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
     }
 }

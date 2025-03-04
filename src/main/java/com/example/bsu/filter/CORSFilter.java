@@ -1,4 +1,4 @@
-package com.example.bsu.filter.CORSFilter;
+package com.example.bsu.filter;
 
 import jakarta.annotation.Priority;
 import jakarta.servlet.Filter;

@@ -1,4 +1,4 @@
-package com.example.bsu.filter.LoggerFilter;
+package com.example.bsu.filter;
 
 
 import jakarta.servlet.annotation.WebFilter;

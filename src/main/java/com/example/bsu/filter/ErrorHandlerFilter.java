@@ -1,6 +1,5 @@
-package com.example.bsu.filter.ErrorHandlerFilter;
+package com.example.bsu.filter;
 
-import com.example.bsu.filter.LoggerFilter.LoggerFilter;
 import jakarta.servlet.Filter;
 import jakarta.annotation.Priority;
 import jakarta.servlet.FilterChain;
@@ -25,10 +24,9 @@ public class ErrorHandlerFilter implements Filter {
             chain.doFilter(request, response);
         } catch (Exception e) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            logger.error(e);
             e.printStackTrace();
             logger.error(e.toString());
-            String jsonResponse = "{ \"error\" : " + e.getMessage() + "}";
+            String jsonResponse = "{ \"message\" : " + e.getMessage() + "}";
             httpResponse.setCharacterEncoding("UTF-8");
             httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             httpResponse.setContentType("application/json");

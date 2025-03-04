@@ -20,4 +20,7 @@ public class SessionService {
         Session session = SessionDao.findById(uuid);
         SessionDao.delete(session);
     }
+    public static void deleteAll(int userId) {
+        SessionDao.deleteAll(userId);
+    }
 }

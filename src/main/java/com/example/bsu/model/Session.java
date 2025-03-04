@@ -1,6 +1,7 @@
 package com.example.bsu.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -14,10 +15,14 @@ public class Session {
     @JoinColumn(name = "user_id",nullable = false,referencedColumnName = "id")
     private User user;
 
+    @Column(name = "expiration_date")
+    private String expiration;
+
     public Session() {}
     public Session(UUID id,User user) {
         this.id = id.toString();
         this.user = user;
+        this.expiration = LocalDateTime.now().plusMinutes(5).toString();
     }
 
     public UUID getId() {
@@ -31,5 +36,11 @@ public class Session {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+    public String getExpiration() {
+        return expiration;
+    }
+    public void setExpiration(String expiration) {
+        this.expiration = expiration;
     }
 }

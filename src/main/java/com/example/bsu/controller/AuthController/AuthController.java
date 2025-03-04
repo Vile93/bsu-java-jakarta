@@ -14,15 +14,15 @@ public class AuthController extends HttpServlet {
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
             ObjectMapper mapper = new ObjectMapper();
             AuthRequestLogin authRequestLogin = mapper.readValue(request.getReader(), AuthRequestLogin.class);
-            AuthService.login(request,response,authRequestLogin);
+            AuthService.login(response,authRequestLogin);
     }
-    private void doLogout(HttpServletRequest request, HttpServletResponse response) {
+    private void doLogout(HttpServletRequest request, HttpServletResponse response) throws IOException {
             AuthService.logout(request,response);
     }
     private void doRegister(HttpServletRequest request, HttpServletResponse response) throws IOException {
             ObjectMapper mapper = new ObjectMapper();
             AuthRequestRegister authRequestRegister = mapper.readValue(request.getReader(), AuthRequestRegister.class);
-            AuthService.register(request,response,authRequestRegister);
+            AuthService.register(response,authRequestRegister);
     }
 
     @Override
@@ -39,8 +39,10 @@ public class AuthController extends HttpServlet {
                  doRegister(request, response);
                  break;
             default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                break;
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write("{\"message\":\"Not Found\"}");
         }
     }
 }
