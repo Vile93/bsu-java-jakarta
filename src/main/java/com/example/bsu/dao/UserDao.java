@@ -17,7 +17,7 @@ public class UserDao {
         session.close();
         return user;
     }
-    public static  User findById(int id) {
+    public static User findById(int id) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
         User user = null;
         user = (User) session.get(User.class, id);

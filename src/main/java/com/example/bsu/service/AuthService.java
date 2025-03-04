@@ -2,20 +2,26 @@ package com.example.bsu.service;
 
 import com.example.bsu.controller.AuthController.AuthRequestLogin;
 import com.example.bsu.controller.AuthController.AuthRequestRegister;
+import com.example.bsu.dao.SessionDao;
 import com.example.bsu.dao.UserDao;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class AuthService {
+    private static final Logger logger = LogManager.getLogger(AuthService.class);
+
     public static void register(HttpServletRequest request,HttpServletResponse response,AuthRequestRegister authRequestRegister) throws IOException {
         User dbUser = UserDao.findByUsername(authRequestRegister.getUsername());
         if (dbUser != null) {
-            String jsonResponse = "{: \"error\": \"username already in use\"}";
+            String jsonResponse = "{ \"error\": \"username already in use\"}";
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -29,7 +35,7 @@ public class AuthService {
         newUser.setName(authRequestRegister.getUsername());
         newUser.setEmail(authRequestRegister.getEmail());
         UserDao.save(newUser);
-        String jsonResponse = "{: \"success\": \"" + authRequestRegister.getUsername() + "\"}";
+        String jsonResponse = "{ \"success\": \"" + authRequestRegister.getUsername() + "\"}";
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_CREATED);
@@ -38,8 +44,11 @@ public class AuthService {
     }
     public static void login(HttpServletRequest request, HttpServletResponse response,AuthRequestLogin authRequestLogin) throws IOException {
         User dbUser = UserDao.findByUsername(authRequestLogin.getUsername());
+        Boolean isCorrectPassword = null;
+        UUID sessionId = null;
+
         if(dbUser == null) {
-            String jsonResponse = "{: \"error\": \"username not found\"}";
+            String jsonResponse = "{ \"error\": \"username not found\"}";
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -47,9 +56,9 @@ public class AuthService {
             response.getWriter().flush();
             return;
         }
-        Boolean isCorrectPassword = BcryptService.verify(authRequestLogin.getPassword(), dbUser.getPassword());
+        isCorrectPassword = BcryptService.verify(authRequestLogin.getPassword(), dbUser.getPassword());
         if(!isCorrectPassword) {
-            String jsonResponse = "{: \"error\": \"wrong password\"}";
+            String jsonResponse = "{ \"error\": \"wrong password\"}";
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -57,8 +66,13 @@ public class AuthService {
             response.getWriter().flush();
             return;
         }
-        // TODO session
-        String jsonResponse = "{: \"success\": \"" + authRequestLogin.getUsername() + "\"}";
+        sessionId = SessionService.create(dbUser);
+        String jsonResponse = "{ \"success\": \"" + authRequestLogin.getUsername() + "\"}";
+        Cookie sessionCookie = new Cookie("session", sessionId.toString());
+        sessionCookie.setPath("/");
+        sessionCookie.setHttpOnly(true);
+        sessionCookie.setMaxAge(7 * 24 * 60 * 60);
+        response.addCookie(sessionCookie);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
@@ -67,14 +81,24 @@ public class AuthService {
     }
     public static void logout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         Cookie session = CookieService.getCookie(httpServletRequest,"session");
-        if(session != null) {
-                Cookie sessionCookie = new Cookie("session", "");
-                sessionCookie.setMaxAge(0);
-                sessionCookie.setPath("/");
-                httpServletResponse.addCookie(sessionCookie);
-                httpServletResponse.setStatus(HttpServletResponse.SC_OK);
-        } else {
+        if(session == null) {
             httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
         }
+        logger.info("UUID: " + session.getValue());
+        Session s = SessionService.findById(UUID.fromString(session.getValue()));
+        if(s == null) {
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        SessionService.delete(s.getId());
+        Cookie sessionCookie = new Cookie("session", "");
+        sessionCookie.setMaxAge(0);
+        sessionCookie.setPath("/");
+        sessionCookie.setHttpOnly(true);
+        httpServletResponse.addCookie(sessionCookie);
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
     }
 }

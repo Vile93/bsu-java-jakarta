@@ -2,6 +2,7 @@ package com.example.bsu.service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class CookieService {
     public static Cookie getCookie(HttpServletRequest request, String name) {

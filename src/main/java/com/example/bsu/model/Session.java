@@ -1,6 +1,7 @@
 package com.example.bsu.model;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "sessions")
@@ -9,21 +10,21 @@ public class Session {
     @Id
     private String id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id",nullable = false,referencedColumnName = "id")
     private User user;
 
     public Session() {}
-    public Session(String id,User user) {
-        this.id = id;
+    public Session(UUID id,User user) {
+        this.id = id.toString();
         this.user = user;
     }
 
-    public String getId() {
-        return id;
+    public UUID getId() {
+        return UUID.fromString(id);
     }
-    public void setId(String id) {
-        this.id = id;
+    public void setId(UUID id) {
+        this.id = id.toString();
     }
     public User getUser() {
         return user;
