@@ -1,6 +1,8 @@
 package com.example.bsu.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "todos")
@@ -11,15 +13,20 @@ public class Todo {
     private int id;
 
     @Column(name = "title",nullable = false)
+    @NotEmpty(message = "Title is a required field")
+    @Max(value = 50, message = "Maximum title length is 50 characters")
     private String title;
 
-    @Column(name = "description",nullable = true)
+    @Column(name = "description", nullable = true)
+    @Max(value = 200, message = "Maximum description length is 200 characters")
     private String description;
-
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private User user;
+
+    @Column(name = "image_path", nullable = true)
+    private String imagePath;
 
 
     public Todo() {}
@@ -55,5 +62,10 @@ public class Todo {
     public void setUser(User user) {
         this.user = user;
     }
-
+    public String getImagePath() {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

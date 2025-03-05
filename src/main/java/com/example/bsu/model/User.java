@@ -1,6 +1,10 @@
 package com.example.bsu.model;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "users")
@@ -11,19 +15,18 @@ public class User {
     private int id;
 
     @Column(name = "name", nullable=false, unique = false)
+    @Min(value = 3, message = "The minimum length of a username is 3 characters")
+    @Max(value = 20, message = "The maximum length of a username is 20 characters")
     private String name;
 
     @Column(name = "password",nullable=false, unique = false)
+    @Min(value = 4,message = "Minimum password length is 4 characters")
+    @Max(value = 8,message = "Maximum password length is 8 characters")
     private String password;
 
     @Column(name = "email",nullable=false, unique = false)
+    @Email(message = "Invalid email")
     private String email;
-
-//    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL)
-//    private List<Todo> todos;
-//
-//    @OneToOne(mappedBy = "user_id", cascade = CascadeType.ALL)
-//    private Session session;
 
     public User() {}
 
@@ -64,13 +67,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
-//    public Session getSession() {
-//        return session;
-//    }
-//
-//    public void setSession(Session session) {
-//        this.session = session;
-//    }
 
 }

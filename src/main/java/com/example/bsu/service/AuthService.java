@@ -4,6 +4,7 @@ import com.example.bsu.controller.AuthController.AuthRequestLogin;
 import com.example.bsu.controller.AuthController.AuthRequestRegister;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.User;
+import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +17,7 @@ import java.util.UUID;
 public class AuthService {
     private static final Logger logger = LogManager.getLogger(AuthService.class);
 
-    public static void register(HttpServletResponse response,AuthRequestRegister authRequestRegister) throws IOException {
+    public static void register(HttpServletResponse response,AuthRequestRegister authRequestRegister) throws IOException, ValidationFailedExceptionUtil {
         User dbUser = UserService.findByUsername(authRequestRegister.getUsername());
         if (dbUser != null) {
             String jsonResponse = "{ \"message\": \"username already in use\"}";

@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet("/api/todos/*")
+@WebServlet("/api/todos")
 public class TodoController extends HttpServlet {
     private void getTodos(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = (Session) request.getAttribute("session");
