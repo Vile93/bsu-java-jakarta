@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class UserService {
 
-    private static Validator validator =  Validation.buildDefaultValidatorFactory().getValidator();
+    //private static Validator validator =  Validation.buildDefaultValidatorFactory().getValidator();
 
 
     public static User findById(int id) {
@@ -22,10 +22,10 @@ public class UserService {
         return UserDao.findByUsername(username);
     }
     public static void create(User user) throws ValidationFailedExceptionUtil {
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
+       /* Set<ConstraintViolation<User>> violations = validator.validate(user);
         if(!violations.isEmpty()){
             throw new ValidationFailedExceptionUtil("Validation failed");
-        }
+        }*/
         UserDao.save(user);
     }
     public static void delete(int id) {
@@ -42,6 +42,9 @@ public class UserService {
         if(userRequestUpdate.getUsername() != null) {
             user.setName(userRequestUpdate.getUsername());
         }
+        UserDao.update(user);
+    }
+    public static void update(User user) {
         UserDao.update(user);
     }
 }

@@ -4,7 +4,6 @@ import com.example.bsu.model.Session;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.util.UUID;
 
@@ -47,7 +46,7 @@ public class SessionDao {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.createQuery("delete from Session where user_id = :userId").setParameter("userId", userId).executeUpdate();
+            session.createQuery("DELETE FROM Session WHERE user_id = :userId").setParameter("userId", userId).executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
             if(tx != null) tx.rollback();

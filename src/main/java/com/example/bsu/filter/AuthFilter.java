@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Priority(4)
-@WebFilter(urlPatterns = {"/api/users/*", "/api/todos/*"})
+@WebFilter(urlPatterns = {"/api/users/*", "/api/todos/*", "/api/mail/*"})
 public class AuthFilter implements Filter {
 
     @Override

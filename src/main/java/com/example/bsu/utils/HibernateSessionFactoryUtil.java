@@ -1,10 +1,7 @@
 package com.example.bsu.utils;
 
 
-import com.example.bsu.model.Session;
-import com.example.bsu.model.Todo;
-import com.example.bsu.model.User;
-import com.example.bsu.model.UserTodo;
+import com.example.bsu.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -27,7 +24,8 @@ public class HibernateSessionFactoryUtil {
                 configuration.addAnnotatedClass(User.class);
                 configuration.addAnnotatedClass(Todo.class);
                 configuration.addAnnotatedClass(Session.class);
-                configuration.addAnnotatedClass(UserTodo.class);
+                //configuration.addAnnotatedClass(UserTodo.class);
+                configuration.addAnnotatedClass(Mail.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception e) {

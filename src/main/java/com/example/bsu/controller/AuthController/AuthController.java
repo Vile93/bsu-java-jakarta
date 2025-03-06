@@ -1,9 +1,11 @@
 package com.example.bsu.controller.AuthController;
 
 import com.example.bsu.service.AuthService;
+import com.example.bsu.utils.MailUtil;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 @WebServlet("/api/auth/*")
 public class AuthController extends HttpServlet {
+    private Dotenv dotenv = Dotenv.load();
     private void doLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
             ObjectMapper mapper = new ObjectMapper();
             AuthRequestLogin authRequestLogin = mapper.readValue(request.getReader(), AuthRequestLogin.class);
@@ -45,11 +48,11 @@ public class AuthController extends HttpServlet {
                 case "/register":
                     doRegister(request, response);
                     break;
+                case "/test":
+                    MailUtil.send(dotenv.get("MAIL_TEST_RECEIVER"),"testSubject","testText");
+                    break;
                 default:
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    response.setContentType("application/json");
-                    response.setCharacterEncoding("UTF-8");
-                    response.getWriter().write("{\"message\":\"Not Found\"}");
             }
         } catch (ValidationFailedExceptionUtil e) {
 

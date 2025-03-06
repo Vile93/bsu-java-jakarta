@@ -65,7 +65,7 @@ public class TodoDao {
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.createQuery("delete from Todo where user_id = :userId").setParameter("userId", userId).executeUpdate();
+            session.createQuery("DELETE FROM Todo WHERE user_id = :userId").setParameter("userId", userId).executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
             if(tx != null) tx.rollback();

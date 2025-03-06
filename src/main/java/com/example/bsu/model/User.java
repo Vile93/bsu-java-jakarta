@@ -28,12 +28,16 @@ public class User {
     @Email(message = "Invalid email")
     private String email;
 
+    @Column(name = "is_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean verified;
+
     public User() {}
 
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, boolean verified) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.verified = verified;
     }
 
     public int getId() {
@@ -68,4 +72,11 @@ public class User {
         this.email = email;
     }
 
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 }

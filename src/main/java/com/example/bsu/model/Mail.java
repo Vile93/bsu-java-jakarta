@@ -5,23 +5,22 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "sessions")
-public class Session {
-
+@Table(name = "mail")
+public class Mail {
     @Id
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false,referencedColumnName = "id")
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
     private User user;
 
     @Column(name = "expiration_date")
     private String expiration;
 
-    public Session() {
-        this.expiration = LocalDateTime.now().plusMinutes(15).toString();
+    public Mail() {
+        this.expiration = LocalDateTime.now().toString();
     }
-    public Session(UUID id,User user) {
+    public Mail(UUID id, User user) {
         this.id = id.toString();
         this.user = user;
         this.expiration = LocalDateTime.now().plusMinutes(15).toString();
