@@ -8,10 +8,8 @@ import com.example.bsu.utils.MailUtil;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
 import java.util.UUID;
-import java.util.logging.Logger;
 
 public class MailService {
-    private static final Logger logger = Logger.getLogger(MailService.class.getName());
 
     public static void sendCode(Session session) throws ValidationFailedExceptionUtil {
 

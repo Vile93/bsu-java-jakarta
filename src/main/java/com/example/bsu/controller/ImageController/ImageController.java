@@ -1,6 +1,7 @@
 package com.example.bsu.controller.ImageController;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +15,11 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 5,
+        maxFileSize = 1024 * 1024 * 5,
+        maxRequestSize = 1024 * 1024 * 5
+)
 @WebServlet("/api/images")
 public class ImageController extends HttpServlet {
     private static final String IMAGES_PATH = "images";
@@ -31,8 +37,9 @@ public class ImageController extends HttpServlet {
             InputStream inputStream = filePart.getInputStream();
             File fileToSave = new File(uploadPath + File.separator + fileName);
             Files.copy(inputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
             response.setStatus(HttpServletResponse.SC_CREATED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"" + fileName + "\"}");
         } catch (ServletException | IOException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

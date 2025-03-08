@@ -26,13 +26,12 @@ public class MathController extends HttpServlet {
         out.flush();
     }
 
-    @Override
     protected  void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String path = req.getPathInfo();
        if("/twice".equals(path)) {
            doCompute(req,res);
        } else {
-           res.sendError(HttpServletResponse.SC_BAD_GATEWAY);
+           res.sendError(HttpServletResponse.SC_NOT_FOUND);
        }
     }
 }

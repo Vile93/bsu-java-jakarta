@@ -5,8 +5,6 @@ import com.example.bsu.dao.UserDao;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
-import java.util.logging.Logger;
-
 
 public class UserService {
     public static User findById(int id) {

@@ -8,15 +8,11 @@ import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.UUID;
 
 public class AuthService {
-    private static final Logger logger = LogManager.getLogger(AuthService.class);
-
     public static void register(HttpServletResponse response,AuthRequestRegister authRequestRegister) throws IOException, ValidationFailedExceptionUtil {
         User dbUser = UserService.findByUsername(authRequestRegister.getUsername());
         if (dbUser != null) {

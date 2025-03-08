@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @WebServlet("/api/mail/*")
 public class MailController extends HttpServlet {
-    private void doSend(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void doSend(HttpServletRequest request, HttpServletResponse response) throws IOException, ValidationFailedExceptionUtil {
         Session session = (Session) request.getAttribute("session");
         MailService.sendCode(session);
     }

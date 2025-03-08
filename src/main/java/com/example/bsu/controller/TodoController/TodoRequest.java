@@ -4,6 +4,7 @@ public class TodoRequest {
     private int id;
     private String title;
     private String description;
+    private String imagePath;
 
     public String getTitle() {
         return title;
@@ -13,5 +14,8 @@ public class TodoRequest {
     }
     public int getId() {
         return id;
+    }
+    public String getImagePath() {
+        return imagePath;
     }
 }
