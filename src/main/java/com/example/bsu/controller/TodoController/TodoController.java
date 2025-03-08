@@ -4,6 +4,7 @@ package com.example.bsu.controller.TodoController;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.Todo;
 import com.example.bsu.service.TodoService;
+import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -60,18 +61,32 @@ public class TodoController extends HttpServlet {
             }
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    try {
         Session session = (Session) request.getAttribute("session");
         ObjectMapper mapper = new ObjectMapper();
         TodoRequest todoRequest = mapper.readValue(request.getReader(), TodoRequest.class);
         TodoService.create(todoRequest, session.getUser());
         response.setStatus(HttpServletResponse.SC_CREATED);
+    } catch (ValidationFailedExceptionUtil ve) {
+        response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.getWriter().write(ve.getJSONMessage());
+    }
     }
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Session session = (Session) request.getAttribute("session");
-        ObjectMapper mapper = new ObjectMapper();
-        TodoRequest todoRequest = mapper.readValue(request.getReader(),TodoRequest.class);
-        TodoService.update(todoRequest,session.getUser());
-        response.setStatus(HttpServletResponse.SC_OK);
+       try {
+           Session session = (Session) request.getAttribute("session");
+           ObjectMapper mapper = new ObjectMapper();
+           TodoRequest todoRequest = mapper.readValue(request.getReader(), TodoRequest.class);
+           TodoService.update(todoRequest, session.getUser());
+           response.setStatus(HttpServletResponse.SC_OK);
+       } catch (ValidationFailedExceptionUtil ve) {
+           response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
+           response.setCharacterEncoding("UTF-8");
+           response.setContentType("application/json");
+           response.getWriter().write(ve.getJSONMessage());
+       }
     }
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String todoId = request.getParameter("id");

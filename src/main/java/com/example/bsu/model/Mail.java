@@ -7,8 +7,13 @@ import java.util.UUID;
 @Entity
 @Table(name = "mail")
 public class Mail {
+
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(name = "verification_code",nullable = false)
+    private String verificationCode;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
@@ -18,19 +23,25 @@ public class Mail {
     private String expiration;
 
     public Mail() {
-        this.expiration = LocalDateTime.now().toString();
+        this.expiration = LocalDateTime.now().plusMinutes(15).toString();
     }
-    public Mail(UUID id, User user) {
-        this.id = id.toString();
+    public Mail(UUID verificationCode, User user) {
+        this.verificationCode = verificationCode.toString();
         this.user = user;
         this.expiration = LocalDateTime.now().plusMinutes(15).toString();
     }
 
-    public UUID getId() {
-        return UUID.fromString(id);
+    public int getId() {
+        return id;
     }
-    public void setId(UUID id) {
-        this.id = id.toString();
+    public void setId(int id) {
+        this.id = id;
+    }
+    public UUID getVerificationCode() {
+        return UUID.fromString(this.verificationCode);
+    }
+    public void setVerificationCode(UUID verificationCode) {
+        this.verificationCode = verificationCode.toString();
     }
     public User getUser() {
         return user;

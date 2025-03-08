@@ -24,8 +24,8 @@ public class HibernateSessionFactoryUtil {
                 configuration.addAnnotatedClass(User.class);
                 configuration.addAnnotatedClass(Todo.class);
                 configuration.addAnnotatedClass(Session.class);
-                //configuration.addAnnotatedClass(UserTodo.class);
                 configuration.addAnnotatedClass(Mail.class);
+                configuration.addAnnotatedClass(UserTodo.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception e) {

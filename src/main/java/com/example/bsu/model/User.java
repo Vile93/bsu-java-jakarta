@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -15,13 +16,11 @@ public class User {
     private int id;
 
     @Column(name = "name", nullable=false, unique = false)
-    @Min(value = 3, message = "The minimum length of a username is 3 characters")
-    @Max(value = 20, message = "The maximum length of a username is 20 characters")
+    @Size(min = 3, max = 20, message = "The name length must be between 3 and 20 characters")
     private String name;
 
     @Column(name = "password",nullable=false, unique = false)
-    @Min(value = 4,message = "Minimum password length is 4 characters")
-    @Max(value = 8,message = "Maximum password length is 8 characters")
+    @Size(min = 4, message = "The password length must be at least 4 characters")
     private String password;
 
     @Column(name = "email",nullable=false, unique = false)

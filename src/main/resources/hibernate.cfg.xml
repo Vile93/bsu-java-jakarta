@@ -14,10 +14,5 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">update</property>
-
-        <mapping class="com.example.bsu.model.User" />
-        <mapping class="com.example.bsu.model.Todo" />
-        <mapping class="com.example.bsu.model.Session" />
-
     </session-factory>
 </hibernate-configuration>

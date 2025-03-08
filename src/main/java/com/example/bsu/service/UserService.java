@@ -5,16 +5,10 @@ import com.example.bsu.dao.UserDao;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import java.util.Set;
+import java.util.logging.Logger;
+
 
 public class UserService {
-
-    //private static Validator validator =  Validation.buildDefaultValidatorFactory().getValidator();
-
-
     public static User findById(int id) {
         return  UserDao.findById(id);
     }
@@ -22,10 +16,10 @@ public class UserService {
         return UserDao.findByUsername(username);
     }
     public static void create(User user) throws ValidationFailedExceptionUtil {
-       /* Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if(!violations.isEmpty()){
-            throw new ValidationFailedExceptionUtil("Validation failed");
-        }*/
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(user);
+        String password = BcryptService.encrypt(user.getPassword());
+        user.setPassword(password);
         UserDao.save(user);
     }
     public static void delete(int id) {
@@ -34,17 +28,22 @@ public class UserService {
         TodoService.deleteAll(user.getId());
         UserDao.delete(user);
     }
-    public static void update(int id, UserRequestUpdate userRequestUpdate) {
+    public static void update(int id, UserRequestUpdate userRequestUpdate) throws ValidationFailedExceptionUtil {
         User user = UserDao.findById(id);
-        if(userRequestUpdate.getEmail() != null) {
-            user.setEmail(userRequestUpdate.getEmail());
-        }
         if(userRequestUpdate.getUsername() != null) {
             user.setName(userRequestUpdate.getUsername());
         }
+        if(userRequestUpdate.getEmail() != null) {
+            user.setEmail(userRequestUpdate.getEmail());
+            user.setVerified(false);
+        }
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(user);
         UserDao.update(user);
     }
-    public static void update(User user) {
+    public static void update(User user) throws ValidationFailedExceptionUtil {
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(user);
         UserDao.update(user);
     }
 }

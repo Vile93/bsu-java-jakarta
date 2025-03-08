@@ -4,6 +4,7 @@ package com.example.bsu.controller.UserController;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.User;
 import com.example.bsu.service.UserService;
+import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,11 +30,18 @@ public class UserController extends HttpServlet {
         out.flush();
     }
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Session userSession = (Session) request.getAttribute("session");
-        ObjectMapper mapper = new ObjectMapper();
-        UserRequestUpdate userRequestUpdate = mapper.readValue(request.getReader(), UserRequestUpdate.class);
-        UserService.update(userSession.getUser().getId(), userRequestUpdate);
-        response.setStatus(HttpServletResponse.SC_OK);
+        try {
+            Session userSession = (Session) request.getAttribute("session");
+            ObjectMapper mapper = new ObjectMapper();
+            UserRequestUpdate userRequestUpdate = mapper.readValue(request.getReader(), UserRequestUpdate.class);
+            UserService.update(userSession.getUser().getId(), userRequestUpdate);
+            response.setStatus(HttpServletResponse.SC_OK);
+        } catch (ValidationFailedExceptionUtil ve) {
+            response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.getWriter().write(ve.getJSONMessage());
+        }
     }
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Session userSession = (Session) request.getAttribute("session");

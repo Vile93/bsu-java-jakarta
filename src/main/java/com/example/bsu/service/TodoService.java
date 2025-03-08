@@ -4,6 +4,7 @@ import com.example.bsu.controller.TodoController.TodoRequest;
 import com.example.bsu.dao.TodoDao;
 import com.example.bsu.model.Todo;
 import com.example.bsu.model.User;
+import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
 import java.util.List;
 
@@ -14,11 +15,13 @@ public class TodoService {
     public static Todo findById(int id) {
         return TodoDao.findById(id);
     }
-    public  static void create(TodoRequest todoRequest, User user) {
+    public  static void create(TodoRequest todoRequest, User user) throws ValidationFailedExceptionUtil {
         Todo todo = new Todo();
         todo.setTitle(todoRequest.getTitle());
         todo.setDescription(todoRequest.getDescription());
         todo.setUser(user);
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(todo);
         TodoDao.create(todo);
     }
     public static void delete(int id) {
@@ -28,12 +31,14 @@ public class TodoService {
     public static void deleteAll(int userId) {
         TodoDao.deleteAll(userId);
     }
-    public static void update(TodoRequest todoRequest,User user) {
+    public static void update(TodoRequest todoRequest,User user) throws ValidationFailedExceptionUtil {
         Todo todo = new Todo();
         todo.setId(todoRequest.getId());
         todo.setTitle(todoRequest.getTitle());
         todo.setDescription(todoRequest.getDescription());
         todo.setUser(user);
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(todo);
         TodoDao.update(todo);
     }
 }

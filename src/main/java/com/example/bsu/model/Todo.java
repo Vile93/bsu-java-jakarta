@@ -3,6 +3,7 @@ package com.example.bsu.model;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "todos")
@@ -14,11 +15,11 @@ public class Todo {
 
     @Column(name = "title",nullable = false)
     @NotEmpty(message = "Title is a required field")
-    @Max(value = 50, message = "Maximum title length is 50 characters")
+    @Size(max = 50, message = "Maximum title length is 50 characters")
     private String title;
 
     @Column(name = "description", nullable = true)
-    @Max(value = 200, message = "Maximum description length is 200 characters")
+    @Size(max = 200, message = "Maximum description length is 200 characters")
     private String description;
 
     @ManyToOne

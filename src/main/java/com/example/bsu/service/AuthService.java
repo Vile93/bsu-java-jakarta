@@ -28,9 +28,8 @@ public class AuthService {
             response.getWriter().flush();
             return;
         }
-        String password = BcryptService.encrypt(authRequestRegister.getPassword());
         User newUser = new User();
-        newUser.setPassword(password);
+        newUser.setPassword(authRequestRegister.getPassword());
         newUser.setName(authRequestRegister.getUsername());
         newUser.setEmail(authRequestRegister.getEmail());
         UserService.create(newUser);
