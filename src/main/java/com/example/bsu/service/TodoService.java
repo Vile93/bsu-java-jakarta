@@ -28,7 +28,7 @@ public class TodoService {
         todo.setImagePath(todoRequest.getImagePath());
         ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
         ve.validate(todo);
-        TodoDao.create(todo);
+        TodoDao.save(todo);
     }
     public static void delete(int id, int userId) throws ForbiddenExceptionUtil {
         Todo todo = TodoDao.findById(id);

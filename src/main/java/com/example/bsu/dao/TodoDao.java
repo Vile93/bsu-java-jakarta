@@ -47,7 +47,7 @@ public class TodoDao {
             session.close();
         }
     }
-    public static void create(Todo todo) {
+    public static void save(Todo todo) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
