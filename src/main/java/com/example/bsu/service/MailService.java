@@ -13,9 +13,8 @@ public class MailService {
 
     public static void sendCode(Session session) throws ValidationFailedExceptionUtil {
 
-        if(session.getUser().isVerified() == true) {
-            ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil("This user already was verified");
-            throw ve;
+        if(session.getUser().isVerified()) {
+            throw  new ValidationFailedExceptionUtil("This user already was verified");
         }
         Mail mail = MailDao.findByUserId(session.getUser().getId());
         if(mail != null) {
@@ -33,14 +32,12 @@ public class MailService {
         MailUtil.send(session.getUser().getEmail(),"Email verification","Your code: " + mailId + " . This code will expire in 15 minutes.");
     }
     public static void check(UUID mailId,Session session) throws ValidationFailedExceptionUtil {
-        if(session.getUser().isVerified() == true) {
-            ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil("This user already verified");
-            throw ve;
+        if(session.getUser().isVerified()) {
+            throw new ValidationFailedExceptionUtil("This user already verified");
         }
         Mail mail = MailDao.findByUserId(session.getUser().getId());
         if(!mail.getVerificationCode().toString().equals(mailId.toString())) {
-            ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil("Incrrect verification code");
-            throw ve;
+            throw new ValidationFailedExceptionUtil("Incorrect verification code");
         } else {
             User user = mail.getUser();
             user.setVerified(true);

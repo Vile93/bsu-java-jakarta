@@ -7,8 +7,8 @@ import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
 
 public class UserService {
-    public static User findById(int id) {
-        return  UserDao.findById(id);
+    public static User findById(int userId) {
+        return  UserDao.findById(userId);
     }
     public static User findByUsername(String username) {
         return UserDao.findByUsername(username);
@@ -20,14 +20,14 @@ public class UserService {
         user.setPassword(password);
         UserDao.save(user);
     }
-    public static void delete(int id) {
-        User user = UserDao.findById(id);
+    public static void delete(int userId) {
+        User user = UserDao.findById(userId);
         SessionService.deleteAll(user.getId());
         TodoService.deleteAll(user.getId());
         UserDao.delete(user);
     }
-    public static void update(int id, UserRequestUpdate userRequestUpdate) throws ValidationFailedExceptionUtil {
-        User user = UserDao.findById(id);
+    public static void update(int userId, UserRequestUpdate userRequestUpdate) throws ValidationFailedExceptionUtil {
+        User user = UserDao.findById(userId);
         if(userRequestUpdate.getUsername() != null) {
             user.setName(userRequestUpdate.getUsername());
         }

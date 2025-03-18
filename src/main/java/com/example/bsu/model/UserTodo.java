@@ -10,19 +10,16 @@ public class UserTodo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_id", nullable = false)
-    @OneToMany
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false,referencedColumnName = "id")
     private User user;
 
-    @Column(name = "author_id", nullable = false)
-    @OneToMany
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false,referencedColumnName = "id")
     private User author;
 
-    @Column(name = "todo_id", nullable = false)
-    @OneToMany
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "todo_id", nullable = false,referencedColumnName = "id")
     private Todo todo;
 
     public UserTodo() {}

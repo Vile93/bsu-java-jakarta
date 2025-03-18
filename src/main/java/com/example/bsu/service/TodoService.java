@@ -13,12 +13,15 @@ public class TodoService {
     public static List<Todo> findAllByUserId(int userId) {
         return TodoDao.findAllByUserId(userId);
     }
-    public static Todo findById(int id, int userId) throws ForbiddenExceptionUtil {
-        Todo todo = TodoDao.findById(id);
+    public static Todo findById(int todoId, int userId) throws ForbiddenExceptionUtil {
+        Todo todo = TodoDao.findById(todoId);
         if(todo.getUser().getId() != userId) {
             throw new ForbiddenExceptionUtil();
         }
         return todo;
+    }
+    public static Todo findById(int todoId) {
+        return TodoDao.findById(todoId);
     }
     public  static void create(TodoRequest todoRequest, User user) throws ValidationFailedExceptionUtil {
         Todo todo = new Todo();
@@ -30,8 +33,8 @@ public class TodoService {
         ve.validate(todo);
         TodoDao.save(todo);
     }
-    public static void delete(int id, int userId) throws ForbiddenExceptionUtil {
-        Todo todo = TodoDao.findById(id);
+    public static void delete(int todoId, int userId) throws ForbiddenExceptionUtil {
+        Todo todo = TodoDao.findById(todoId);
         if(todo.getUser().getId() != userId) {
             throw new ForbiddenExceptionUtil();
         }

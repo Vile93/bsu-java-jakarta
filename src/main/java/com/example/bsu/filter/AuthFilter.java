@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Priority(4)
-@WebFilter(urlPatterns = {"/api/users/*", "/api/todos/*", "/api/mail/*"})
+@WebFilter(urlPatterns = {"/api/users/*", "/api/todos/*", "/api/mail/*", "/api/watchers/*"})
 public class AuthFilter implements Filter {
 
     @Override
@@ -39,6 +39,11 @@ public class AuthFilter implements Filter {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+        String path = req.getPathInfo();
+       /* if(!path.startsWith("/api/mail") && !dbSession.getUser().isVerified()) {
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }*/
         request.setAttribute("session", dbSession);
         chain.doFilter(request, response);
     }
