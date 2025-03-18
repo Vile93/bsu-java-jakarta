@@ -1,18 +1,25 @@
-import { Button } from "rsuite";
-import EditIcon from "@rsuite/icons/Edit";
-import CloseIcon from "@rsuite/icons/Close";
-import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
-import EditModal from "../../../components/EditModal";
+import { Button } from 'rsuite';
+import EditIcon from '@rsuite/icons/Edit';
+import CloseIcon from '@rsuite/icons/Close';
+import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import EditModal from '../../../components/EditModal';
+import DeleteModal from '../../../components/DeleteModal';
 
 const Todo = ({ isEditable }) => {
     const navigate = useNavigate();
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
+    const [openEditModal, setOpenEditModal] = useState<boolean>(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+    const handleEditOpen = () => {
+        setOpenEditModal(true);
+    };
+    const handleDeleteOpen = () => {
+        setOpenDeleteModal(true);
+    };
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
-        if (!target.closest(".edit") && !target.closest(".delete")) {
-            navigate("/app/todos/1");
+        if (!target.closest('.edit') && !target.closest('.delete')) {
+            navigate('/app/todos/1');
         }
     };
     if (isEditable) {
@@ -27,19 +34,24 @@ const Todo = ({ isEditable }) => {
                         <div className="text-lg">Todo content...</div>
                     </div>
                     <div className="flex gap-4">
-                        <Button className="edit" onClick={handleOpen}>
+                        <Button className="edit" onClick={handleEditOpen}>
                             <EditIcon color="#000" />
                         </Button>
                         <Button
                             className="delete"
                             color="red"
                             appearance="primary"
+                            onClick={handleDeleteOpen}
                         >
                             <CloseIcon />
                         </Button>
                     </div>
                 </div>
-                <EditModal open={open} setOpen={setOpen} />
+                <EditModal open={openEditModal} setOpen={setOpenEditModal} />
+                <DeleteModal
+                    open={openDeleteModal}
+                    setOpen={setOpenDeleteModal}
+                />
             </>
         );
     }
