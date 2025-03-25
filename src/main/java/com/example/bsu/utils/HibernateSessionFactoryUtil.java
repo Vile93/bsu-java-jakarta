@@ -14,8 +14,6 @@ public class HibernateSessionFactoryUtil {
     private static SessionFactory sessionFactory;
     private static final Logger logger = LogManager.getLogger(HibernateSessionFactoryUtil.class);
 
-    private HibernateSessionFactoryUtil() {}
-
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {

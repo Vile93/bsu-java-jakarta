@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/math/*")
+@WebServlet("/api/math/*")
 public class MathController extends HttpServlet {
     private void doCompute(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();

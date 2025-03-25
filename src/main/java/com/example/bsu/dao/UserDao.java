@@ -8,6 +8,12 @@ import org.hibernate.Transaction;
 
 
 public class UserDao {
+    public static User findByEmail(String email) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        User user = (User) session.createQuery("FROM User WHERE email = :email", User.class).setParameter("email", email).uniqueResult();
+        session.close();
+        return user;
+    }
     public static User findByUsername(String username) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         User user = (User) session.createQuery("FROM User WHERE name = :username", User.class).setParameter("username", username).uniqueResult();
