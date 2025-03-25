@@ -1,9 +1,9 @@
 package com.example.bsu.filter;
 
 
+import com.example.bsu.dao.SessionDao;
 import com.example.bsu.model.Session;
 import com.example.bsu.service.CookieService;
-import com.example.bsu.service.SessionService;
 import jakarta.annotation.Priority;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
@@ -28,14 +28,14 @@ public class AuthFilter implements Filter {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        Session dbSession = SessionService.findById(UUID.fromString(sessionCookie.getValue()));
+        Session dbSession = SessionDao.findById(UUID.fromString(sessionCookie.getValue()));
         if(dbSession == null) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
         LocalDateTime expiration = LocalDateTime.parse(dbSession.getExpiration());
         if(expiration.isBefore(LocalDateTime.now())) {
-            SessionService.delete(dbSession.getId());
+            SessionDao.deleteById(dbSession.getId());
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

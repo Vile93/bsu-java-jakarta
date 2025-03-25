@@ -19,7 +19,7 @@ import java.io.PrintWriter;
 public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Session userSession = (Session) request.getAttribute("session");
-        User user = UserService.findById(userSession.getUser().getId());
+        User user = UserService.find(userSession.getUser().getId());
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);

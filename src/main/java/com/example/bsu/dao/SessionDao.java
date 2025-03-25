@@ -1,6 +1,7 @@
 package com.example.bsu.dao;
 
 import com.example.bsu.model.Session;
+import com.example.bsu.model.User;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
@@ -28,11 +29,42 @@ public class SessionDao {
             session.close();
         }
     }
+    public static UUID save(User user) {
+        org.hibernate.Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        UUID id = UUID.randomUUID();
+        try {
+            tx = session.beginTransaction();
+            Session s = new Session(id, user);
+            session.save(s);
+            tx.commit();
+        } catch (HibernateException e) {
+            if(tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
+        return id;
+    }
     public static void delete(Session s) {
         org.hibernate.Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
+            session.delete(s);
+            tx.commit();
+        } catch (HibernateException e) {
+            if(tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
+    }
+    public static void deleteById(UUID id) {
+        org.hibernate.Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Session s = null;
+            s = (Session) session.get(Session.class, id.toString());
             session.delete(s);
             tx.commit();
         } catch (HibernateException e) {

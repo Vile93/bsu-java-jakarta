@@ -1,6 +1,7 @@
 package com.example.bsu.service;
 
 import com.example.bsu.dao.MailDao;
+import com.example.bsu.dao.UserDao;
 import com.example.bsu.model.Mail;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.User;
@@ -41,7 +42,7 @@ public class MailService {
         } else {
             User user = mail.getUser();
             user.setVerified(true);
-            UserService.update(user);
+            UserDao.update(user);
         }
 
     }

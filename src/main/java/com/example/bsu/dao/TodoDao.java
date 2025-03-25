@@ -34,12 +34,12 @@ public class TodoDao {
             session.close();
         }
     }
-    public static void delete(Todo todo) {
+    public static void save(Todo todo) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.delete(todo);
+            session.save(todo);
             tx.commit();
         } catch (HibernateException e) {
             if(tx != null) tx.rollback();
@@ -47,12 +47,12 @@ public class TodoDao {
             session.close();
         }
     }
-    public static void save(Todo todo) {
+    public static void delete(Todo todo) {
         Session session =  HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
-            session.save(todo);
+            session.delete(todo);
             tx.commit();
         } catch (HibernateException e) {
             if(tx != null) tx.rollback();

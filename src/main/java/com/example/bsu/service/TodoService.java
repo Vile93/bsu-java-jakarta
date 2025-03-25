@@ -20,9 +20,6 @@ public class TodoService {
         }
         return todo;
     }
-    public static Todo findById(int todoId) {
-        return TodoDao.findById(todoId);
-    }
     public  static void create(TodoRequest todoRequest, User user) throws ValidationFailedExceptionUtil {
         Todo todo = new Todo();
         todo.setTitle(todoRequest.getTitle());
@@ -39,9 +36,6 @@ public class TodoService {
             throw new ForbiddenExceptionUtil();
         }
         TodoDao.delete(todo);
-    }
-    public static void deleteAll(int userId) {
-        TodoDao.deleteAll(userId);
     }
     public static void update(TodoRequest todoRequest,User user) throws ValidationFailedExceptionUtil,ForbiddenExceptionUtil {
         if(user.getId() != todoRequest.getId()) {

@@ -2,6 +2,8 @@ package com.example.bsu.service;
 
 import com.example.bsu.controller.AuthController.AuthRequestLogin;
 import com.example.bsu.controller.AuthController.AuthRequestRegister;
+import com.example.bsu.dao.SessionDao;
+import com.example.bsu.dao.UserDao;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
@@ -14,26 +16,16 @@ import java.util.UUID;
 
 public class AuthService {
     public static void register(HttpServletResponse response,AuthRequestRegister authRequestRegister) throws IOException, ValidationFailedExceptionUtil {
-        User dbUser = UserService.findByUsername(authRequestRegister.getUsername());
-        if (dbUser != null) {
-            String jsonResponse = "{ \"message\": \"username already in use\"}";
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpServletResponse.SC_CONFLICT);
-            response.getWriter().write(jsonResponse);
-            response.getWriter().flush();
-            return;
-        }
         User newUser = new User();
         newUser.setPassword(authRequestRegister.getPassword());
         newUser.setName(authRequestRegister.getUsername());
         newUser.setEmail(authRequestRegister.getEmail());
-        UserService.create(newUser);
+        UserDao.save(newUser);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
     public static void login(HttpServletResponse response,AuthRequestLogin authRequestLogin) throws IOException {
-        User dbUser = UserService.findByUsername(authRequestLogin.getUsername());
+        User dbUser = UserDao.findByUsername(authRequestLogin.getUsername());
         Boolean isCorrectPassword = null;
         UUID sessionId = null;
 
@@ -56,7 +48,7 @@ public class AuthService {
             response.getWriter().flush();
             return;
         }
-        sessionId = SessionService.create(dbUser);
+        sessionId = SessionDao.save(dbUser);
         Cookie sessionCookie = new Cookie("session", sessionId.toString());
         sessionCookie.setPath("/");
         sessionCookie.setHttpOnly(true);
@@ -74,7 +66,7 @@ public class AuthService {
             response.getWriter().write("{ \"message\": \"session not found\"}");
             return;
         }
-        Session s = SessionService.findById(UUID.fromString(session.getValue()));
+        Session s = SessionDao.findById(UUID.fromString(session.getValue()));
         if(s == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setCharacterEncoding("UTF-8");
@@ -82,7 +74,7 @@ public class AuthService {
             response.getWriter().write("{ \"message\": \"session not found\"}");
             return;
         }
-        SessionService.delete(s.getId());
+        SessionDao.deleteById(s.getId());
         Cookie sessionCookie = new Cookie("session", "");
         sessionCookie.setMaxAge(0);
         sessionCookie.setPath("/");
