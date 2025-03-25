@@ -1,23 +1,8 @@
-import React, { createContext, FC, useState } from 'react';
-import { TypeAttributes } from 'rsuite/esm/internals/types';
-import { ToastContainerProps } from 'rsuite/esm/toaster/ToastContainer';
-import useToaster from 'rsuite/useToaster';
+import React, { createContext, FC } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 type ToastContextType = {
-    toast: {
-        push: (
-            message: React.ReactNode,
-            options?: ToastContainerProps
-        ) => string | Promise<string | undefined> | undefined;
-        remove: (key: string) => void;
-        clear: () => void;
-    };
-    setToastState: React.Dispatch<
-        React.SetStateAction<{
-            type: TypeAttributes.Status;
-            text: string;
-        } | null>
-    >;
+    notify: (message: string, type?: "success" | "warn" | "error") => void;
 };
 
 export const ToastContext = createContext<ToastContextType | null>(null);
@@ -27,13 +12,16 @@ interface ToastContextProps {
 }
 
 const ToastProvider: FC<ToastContextProps> = ({ children }) => {
-    const toast = useToaster();
-    const [toastState, setToastState] = useState<{
-        type: TypeAttributes.Status;
-        text: string;
-    } | null>(null);
+    const notify = (message: string, type?: "success" | "warn" | "error") => {
+        if (!type) {
+            toast(<div className="font-bold">{message}</div>);
+            return;
+        }
+        toast[type](<div className="font-bold">{message}</div>);
+    };
     return (
-        <ToastContext.Provider value={{ toast, setToastState }}>
+        <ToastContext.Provider value={{ notify }}>
+            <ToastContainer />
             {children}
         </ToastContext.Provider>
     );

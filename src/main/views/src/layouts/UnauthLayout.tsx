@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom';
-import HeaderLink from './components/HeaderLink';
-import Header from './components/Header';
+import { Outlet } from "react-router-dom";
+import HeaderLink from "./components/HeaderLink";
+import Header from "./components/Header";
 
 const UnauthLayout = () => {
     return (

@@ -3,7 +3,7 @@ import { Schema } from "rsuite";
 const { StringType } = Schema.Types;
 
 export const registerModel = Schema.Model({
-    name: StringType()
+    username: StringType()
         .isRequired("This field is required")
         .minLength(3, "Minimum username length is 3 characters")
         .maxLength(20, "The maximum length of a username is 20 characters"),
