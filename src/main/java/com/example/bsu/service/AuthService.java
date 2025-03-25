@@ -20,6 +20,10 @@ public class AuthService {
         newUser.setPassword(authRequestRegister.getPassword());
         newUser.setName(authRequestRegister.getUsername());
         newUser.setEmail(authRequestRegister.getEmail());
+        ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
+        ve.validate(newUser);
+        String encryptedPassword = BcryptService.encrypt(newUser.getPassword());
+        newUser.setPassword(encryptedPassword);
         UserDao.save(newUser);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_CREATED);
@@ -55,6 +59,7 @@ public class AuthService {
         sessionCookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(sessionCookie);
         response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{ \"isVerified\": \"" + dbUser.isVerified() + "\"}" );
         response.setStatus(HttpServletResponse.SC_OK);
     }
     public static void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {

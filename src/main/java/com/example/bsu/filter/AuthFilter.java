@@ -39,11 +39,16 @@ public class AuthFilter implements Filter {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        String path = req.getPathInfo();
-       /* if(!path.startsWith("/api/mail") && !dbSession.getUser().isVerified()) {
+        String servletPath = req.getServletPath();
+        if(servletPath.contains("/api/mail")) {
+            request.setAttribute("session", dbSession);
+            chain.doFilter(request, response);
+            return;
+        }
+        if(!dbSession.getUser().isVerified()) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
-        }*/
+        }
         request.setAttribute("session", dbSession);
         chain.doFilter(request, response);
     }

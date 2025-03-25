@@ -30,7 +30,6 @@ public class ImageController extends HttpServlet {
         if (!uploadedDir.exists()) {
             uploadedDir.mkdir();
         }
-
         try {
             Part filePart = request.getPart("image");
             String fileName = UUID.randomUUID().toString() + ".jpg";

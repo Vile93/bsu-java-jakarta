@@ -12,13 +12,13 @@ public class UserService {
     public static User find(int userId) {
         return  UserDao.findById(userId);
     }
-    public static void create(User user) throws ValidationFailedExceptionUtil {
+  /*  public static void create(User user) throws ValidationFailedExceptionUtil {
         ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
         ve.validate(user);
         String password = BcryptService.encrypt(user.getPassword());
         user.setPassword(password);
         UserDao.save(user);
-    }
+    }*/
     public static void delete(int userId) {
         User user = UserDao.findById(userId);
         SessionDao.deleteAll(user.getId());

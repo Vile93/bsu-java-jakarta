@@ -24,7 +24,6 @@ public class AuthController extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         AuthRequestRegister authRequestRegister = mapper.readValue(request.getReader(), AuthRequestRegister.class);
         AuthService.register(response, authRequestRegister);
-
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
