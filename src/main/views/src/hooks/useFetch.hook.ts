@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosError } from "axios";
-import { useState } from "react";
+import { AxiosError } from 'axios';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import { getProfile } from '../services/user.service';
 
 export const useFetch = (callback: (...args) => any, ...args: any[]) => {
     const [data, setData] = useState<any>();
@@ -14,6 +16,14 @@ export const useFetch = (callback: (...args) => any, ...args: any[]) => {
         message: any;
         status?: number;
     } | null>(null);
+    const authContext = useContext(AuthContext);
+    const auth = async () => {
+        try {
+            await getProfile();
+        } catch {
+            authContext?.setIsAuth(false);
+        }
+    };
     const fetch = async () => {
         if (newArgs) {
             return await callback(...newArgs);
@@ -21,7 +31,10 @@ export const useFetch = (callback: (...args) => any, ...args: any[]) => {
             return await callback(...args);
         }
     };
-    const fetchData = async () => {
+    const fetchData = async (withAuth = true) => {
+        if (withAuth) {
+            await auth();
+        }
         setIsSuccessCompleted(false);
         setIsCompleted(false);
         setIsLoading(true);

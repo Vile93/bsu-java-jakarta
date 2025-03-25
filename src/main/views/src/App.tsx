@@ -8,7 +8,7 @@ import UnauthLayout from './layouts/UnauthLayout';
 import AuthLayout from './layouts/AuthLayout';
 import UnprotectedRoute from './components/UnprotectedRoute';
 import { useContext } from 'react';
-import { AuthContext } from './context/AuthContext';
+import { AuthContext } from './contexts/AuthContext';
 import UserTodopage from './pages/UserTodopage';
 
 function App() {

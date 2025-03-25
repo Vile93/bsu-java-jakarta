@@ -1,7 +1,8 @@
+import { setQuery } from '../utils/setQuery.utils';
 import { API } from './main.service';
 
-export const checkMail = () => {
-    return API.post('/mail/check');
+export const checkMail = (query: { mailId: string }) => {
+    return API.post('/mail/check' + setQuery(query));
 };
 
 export const sendMail = () => {
