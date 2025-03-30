@@ -1,9 +1,10 @@
-import { Button, Form } from "rsuite";
-import { editUserModel } from "../../../constants";
-import { useFetch } from "../../../hooks/useFetch.hook";
-import { editProfile } from "../../../services/user.service";
-import { useContext, useEffect } from "react";
-import { ToastContext } from "../../../contexts/ToastContext";
+import { Button, Form } from 'rsuite';
+import { editUserModel } from '../../../constants';
+import { useFetch } from '../../../hooks/useFetch.hook';
+import { editProfile } from '../../../services/user.service';
+import { useContext, useEffect } from 'react';
+import { ToastContext } from '../../../contexts/ToastContext';
+import { showValidationError } from '../../../utils/showValidationError.utils';
 
 const EditProfile = () => {
     const fetchEditProfie = useFetch(editProfile);
@@ -17,9 +18,16 @@ const EditProfile = () => {
     useEffect(() => {
         if (fetchEditProfie.isCompleted) {
             if (fetchEditProfie.isSuccessCompleted) {
-                toastContext?.notify("User updated", "success");
+                toastContext?.notify('User updated', 'success');
             } else {
-                toastContext?.notify("Error updating user", "error");
+                if (fetchEditProfie.errorData?.status === 422) {
+                    showValidationError(
+                        toastContext,
+                        fetchEditProfie.errorData?.message
+                    );
+                } else {
+                    toastContext?.notify('Error updating user', 'error');
+                }
             }
         }
     }, [fetchEditProfie.isCompleted]);

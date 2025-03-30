@@ -1,15 +1,16 @@
+import { Todo } from '../interfaces/todo.interface';
 import { API } from './main.service';
 
-export const getTodos = () => {
+export const fetchTodos = () => {
     return API.get('/todos');
 };
 
-export const getTodo = () => {
+export const fetchTodo = () => {
     return API.get('/todos');
 };
 
-export const createTodo = () => {
-    return API.post('/todos');
+export const createTodo = (data: Todo) => {
+    return API.post('/todos', data);
 };
 
 export const editTodo = () => {

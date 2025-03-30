@@ -2,11 +2,17 @@ import { Button } from 'rsuite';
 import EditIcon from '@rsuite/icons/Edit';
 import CloseIcon from '@rsuite/icons/Close';
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import EditModal from '../../../components/EditModal';
 import DeleteModal from '../../../components/DeleteModal';
 
-const Todo = ({ isEditable }) => {
+interface TodoProps {
+    isEditable?: boolean;
+    title: string;
+    description?: string;
+}
+
+const Todo: FC<TodoProps> = ({ isEditable, description, title }) => {
     const navigate = useNavigate();
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -22,7 +28,7 @@ const Todo = ({ isEditable }) => {
             navigate('/app/todos/1');
         }
     };
-    if (isEditable) {
+    if (!isEditable) {
         return (
             <>
                 <div
@@ -30,8 +36,10 @@ const Todo = ({ isEditable }) => {
                     onClick={handleClick}
                 >
                     <div className="flex flex-col">
-                        <div className="text-2xl font-bold">Todo title</div>
-                        <div className="text-lg">Todo content...</div>
+                        <div className="text-2xl font-bold">{title}</div>
+                        <div className="text-lg whitespace-pre">
+                            {description ?? ''}
+                        </div>
                     </div>
                     <div className="flex gap-4">
                         <Button className="edit" onClick={handleEditOpen}>
@@ -56,10 +64,12 @@ const Todo = ({ isEditable }) => {
         );
     }
     return (
-        <div className="flex flex-col gap-4 grow-1" onClick={handleClick}>
+        <div className="flex flex-col gap-4" onClick={handleClick}>
             <div className="hover:bg-green-300 hover:cursor-pointer transition-colors duration-300 border-green-100 border-2 p-4 rounded bg-green-200">
-                <div className="text-2xl font-bold">Todo title</div>
-                <div className="text-lg">Todo content...</div>
+                <div className="text-2xl font-bold">{title}</div>
+                <div className="text-lg whitespace-pre">
+                    {description ?? ''}
+                </div>
             </div>
         </div>
     );
