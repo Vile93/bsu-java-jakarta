@@ -1,17 +1,17 @@
-import { Button, ButtonToolbar, Form, Loader } from 'rsuite';
-import { registerModel } from '../constants';
-import { useFetch } from '../hooks/useFetch.hook';
-import { register } from '../services/auth.service';
-import { useContext, useEffect } from 'react';
-import { ToastContext } from '../contexts/ToastContext.tsx';
-import { showValidationError } from '../utils/showValidationError.utils.tsx';
+import { Button, ButtonToolbar, Form, Loader } from "rsuite";
+import { registerModel } from "../constants";
+import { useFetch } from "../hooks/useFetch.hook";
+import { register } from "../services/auth.service";
+import { useContext, useEffect } from "react";
+import { ToastContext } from "../contexts/ToastContext.tsx";
+import { showValidationError } from "../utils/showValidationError.utils.tsx";
 
 const Registerpage = () => {
     const toastContext = useContext(ToastContext);
     const fetchRegister = useFetch(register);
     useEffect(() => {
         if (fetchRegister.newArgs) {
-            fetchRegister.fetchData(false);
+            fetchRegister.fetchData();
             fetchRegister.setNewArgs(null);
         }
     }, [fetchRegister.newArgs]);
@@ -25,7 +25,7 @@ const Registerpage = () => {
                 );
             }
         } else if (fetchRegister.isSuccessCompleted) {
-            toastContext?.notify('User was succesfully registered!', 'success');
+            toastContext?.notify("User was succesfully registered!", "success");
         }
     }, [fetchRegister.isCompleted]);
     if (fetchRegister.isLoading) {

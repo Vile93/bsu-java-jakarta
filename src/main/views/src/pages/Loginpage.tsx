@@ -1,12 +1,12 @@
-import { Button, ButtonToolbar, Form, Loader } from 'rsuite';
-import { emailCodeModel, loginModel } from '../constants';
-import { useFetch } from '../hooks/useFetch.hook';
-import { login } from '../services/auth.service';
-import { useContext, useEffect } from 'react';
-import { ToastContext } from '../contexts/ToastContext';
-import { capitalize } from '../utils/capitalize.utils';
-import { checkMail, sendMail } from '../services/mail.service';
-import { AuthContext } from '../contexts/AuthContext';
+import { Button, ButtonToolbar, Form, Loader } from "rsuite";
+import { emailCodeModel, loginModel } from "../constants";
+import { useFetch } from "../hooks/useFetch.hook";
+import { login } from "../services/auth.service";
+import { useContext, useEffect } from "react";
+import { ToastContext } from "../contexts/ToastContext";
+import { capitalize } from "../utils/capitalize.utils";
+import { checkMail, sendMail } from "../services/mail.service";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Loginpage = () => {
     const fetchLogin = useFetch(login);
@@ -16,7 +16,7 @@ const Loginpage = () => {
     const authContext = useContext(AuthContext);
     useEffect(() => {
         if (fetchLogin.newArgs) {
-            fetchLogin.fetchData(false);
+            fetchLogin.fetchData();
             fetchLogin.setNewArgs(null);
         }
     }, [fetchLogin.newArgs]);
@@ -27,15 +27,15 @@ const Loginpage = () => {
         ) {
             toastContext?.notify(
                 capitalize(fetchLogin.errorData?.message),
-                'error'
+                "error"
             );
         }
     }, [fetchLogin.errorData]);
     useEffect(() => {
         if (fetchLogin.isSuccessCompleted) {
-            if (fetchLogin.data?.isVerified === 'false') {
-                fetchSendMail.fetchData(false);
-                toastContext?.notify('Check your email.', 'warn');
+            if (fetchLogin.data?.isVerified === "false") {
+                fetchSendMail.fetchData();
+                toastContext?.notify("Check your email.", "warn");
             } else {
                 authContext?.setIsAuth(true);
             }
@@ -43,19 +43,20 @@ const Loginpage = () => {
     }, [fetchLogin.isSuccessCompleted]);
     useEffect(() => {
         if (fetchCheckMail.newArgs) {
-            fetchCheckMail.fetchData(false);
+            fetchCheckMail.fetchData();
         }
     }, [fetchCheckMail.newArgs]);
     useEffect(() => {
         if (fetchCheckMail.isCompleted) {
             if (fetchCheckMail.isSuccessCompleted) {
                 authContext?.setIsAuth(true);
-                console.log(true);
-            } else if (fetchSendMail.errorData?.status !== 500) {
+            } else if (fetchCheckMail.errorData?.status !== 500) {
                 toastContext?.notify(
                     fetchCheckMail.errorData?.message,
-                    'error'
+                    "error"
                 );
+            } else {
+                toastContext?.notify("Internal server error", "error");
             }
         }
     }, [fetchCheckMail.isCompleted]);
@@ -72,7 +73,7 @@ const Loginpage = () => {
         <>
             <div className="w-1/2 mx-auto mt-32 flex justify-center">
                 {fetchLogin.isSuccessCompleted &&
-                fetchLogin.data?.isVerified === 'false' ? (
+                fetchLogin.data?.isVerified === "false" ? (
                     <Form
                         model={emailCodeModel}
                         onSubmit={(data) => {
