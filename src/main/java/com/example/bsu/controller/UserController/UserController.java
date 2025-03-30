@@ -45,7 +45,7 @@ public class UserController extends HttpServlet {
     }
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Session userSession = (Session) request.getAttribute("session");
-        UserService.delete(userSession.getUser().getId());
+        UserService.delete(userSession.getUser());
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

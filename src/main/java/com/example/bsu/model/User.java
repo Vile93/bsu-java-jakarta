@@ -12,7 +12,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "name", nullable=false, unique = true)
     @Size(min = 3, max = 20, message = "The name length must be between 3 and 20 characters")
@@ -40,7 +40,7 @@ public class User {
         this.verified = verified;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

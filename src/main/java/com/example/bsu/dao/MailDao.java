@@ -1,6 +1,7 @@
 package com.example.bsu.dao;
 
 import com.example.bsu.model.Mail;
+import com.example.bsu.model.User;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -32,6 +33,19 @@ public class MailDao {
         try {
             tx = session.beginTransaction();
             session.update(mail);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
+    }
+    public  static void deleteAllByUser(User user) {
+        org.hibernate.Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.createQuery("DELETE FROM Mail WHERE user_id = :userId").setParameter("userId", user.getId()).executeUpdate();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) tx.rollback();

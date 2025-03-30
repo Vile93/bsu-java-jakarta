@@ -11,7 +11,10 @@ public class UniqueUserEmailValidator implements ConstraintValidator<UniqueUserE
 
     public UniqueUserEmailValidator() {}
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        User user = UserDao.findByEmail(email);
-        return user == null;
+        if (email == null) {
+            return true;
+        }
+        User dbUser = UserDao.findByEmail(email);
+        return dbUser == null;
     }
 }
