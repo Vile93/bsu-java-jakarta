@@ -1,6 +1,7 @@
 package com.example.bsu.controller.TodoController;
 
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import com.example.bsu.model.Session;
 import com.example.bsu.model.Todo;
 import com.example.bsu.service.TodoService;
@@ -21,26 +22,20 @@ import java.util.List;
 public class TodoController extends HttpServlet {
     private void getTodos(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = (Session) request.getAttribute("session");
+        JSONArray  jsonArray = new JSONArray();
         List<Todo> todos = TodoService.findAllByUserId(session.getUser().getId());
+        for(int i = 0; i < todos.size(); i++) {
+            Todo todo = todos.get(i);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", todo.getId());
+            jsonObject.put("title", todo.getTitle());
+            jsonObject.put("description", todo.getDescription());
+            jsonArray.add(jsonObject);
+        }
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        PrintWriter out = response.getWriter();
-        out.print("[");
-        for(int i = 0; i < todos.size(); i++) {
-            Todo todo = todos.get(i);
-            out.print("{ \"id\":" + todo.getId());
-            out.print(", \"title\":\"" + todo.getTitle() + "\"");
-            out.print(", \"description\":\"" + todo.getDescription() + "\"");
-            if(i == todos.size() - 1) {
-                out.print("}");
-            } else {
-                out.print("},");
-            }
-        }
-        out.print("]");
-        out.flush();
-
+        response.getWriter().write(jsonArray.toJSONString());
     }
     private void getTodo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {

@@ -22,6 +22,13 @@ public class AuthService {
         newUser.setEmail(authRequestRegister.getEmail());
         ValidationFailedExceptionUtil ve = new ValidationFailedExceptionUtil();
         ve.validate(newUser);
+        User dbUser = UserDao.findByEmail(authRequestRegister.getEmail());
+        if (dbUser != null) {
+            response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"Email already in use\"}");
+            return;
+        }
         String encryptedPassword = BcryptService.encrypt(newUser.getPassword());
         newUser.setPassword(encryptedPassword);
         UserDao.save(newUser);

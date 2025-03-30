@@ -1,6 +1,5 @@
 package com.example.bsu.model;
 
-import com.example.bsu.annotations.UniqueUserEmail;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -20,12 +19,10 @@ public class User {
 
     @Column(name = "password",nullable=false, unique = false)
     @Size(min = 4, message = "The password length must be at least 4 characters")
-    @UniqueUserEmail(message = "A user with this username already exists")
     private String password;
 
     @Column(name = "email",nullable=false, unique = true)
     @Email(message = "Invalid email")
-    @UniqueUserEmail(message = "Mail is already registered")
     private String email;
 
     @Column(name = "is_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
