@@ -40,7 +40,7 @@ public class ImageController extends HttpServlet {
             Files.copy(inputStream, fileToSave.toPath(), StandardCopyOption.REPLACE_EXISTING);
             response.setStatus(HttpServletResponse.SC_CREATED);
             response.setContentType("application/json");
-            jsonObject.put("message", filePart);
+            jsonObject.put("message", fileName);
             response.getWriter().write(jsonObject.toJSONString());
         } catch (ServletException | IOException e) {
             e.printStackTrace();

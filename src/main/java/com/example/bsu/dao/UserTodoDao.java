@@ -1,5 +1,6 @@
 package com.example.bsu.dao;
 
+import com.example.bsu.model.Todo;
 import com.example.bsu.model.User;
 import com.example.bsu.model.UserTodo;
 import com.example.bsu.utils.HibernateSessionFactoryUtil;
@@ -10,6 +11,12 @@ import org.hibernate.Transaction;
 import java.util.List;
 
 public class UserTodoDao {
+    public static UserTodo findByUserAndTodoId(User user, Todo todo) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        UserTodo userTodo = (UserTodo) session.createQuery("FROM UserTodo ut WHERE ut.user.id = :userId AND ut.todo.id = :todoId").setParameter("userId", user.getId()).setParameter("todoId", todo.getId()).uniqueResult();
+        session.close();
+        return userTodo;
+    }
     public static UserTodo findByUserTodo(UserTodo userTodo) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         UserTodo resultUserTodo = (UserTodo) session.createQuery("FROM UserTodo ut WHERE ut.user.id = :userId AND ut.todo.id = :todoId AND ut.author.id = :authorId").setParameter("userId",userTodo.getUser().getId()).setParameter("authorId", userTodo.getAuthor().getId()).setParameter("todoId", userTodo.getTodo().getId()).uniqueResult();

@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/api/todos")
@@ -40,15 +39,17 @@ public class TodoController extends HttpServlet {
     private void getTodo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             Session session = (Session) request.getAttribute("session");
-            Todo todo = TodoService.findById(Integer.parseInt(request.getParameter("id")), session.getUser().getId());
+            JSONObject jsonObject = new JSONObject();
+            Todo todo = TodoService.findById(Integer.parseInt(request.getParameter("id")), session.getUser());
+            jsonObject.put("id", todo.getId());
+            jsonObject.put("title", todo.getTitle());
+            jsonObject.put("description", todo.getDescription());
+            jsonObject.put("imagePath", todo.getImagePath());
+            jsonObject.put("isUserTodo", todo.getUser().getId().equals(session.getUser().getId()));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_OK);
-            PrintWriter out = response.getWriter();
-            out.print("{ \"id\":" + todo.getId());
-            out.print(", \"title\":\"" + todo.getTitle() + "\"");
-            out.print(", \"description\":\"" + todo.getDescription() + "\"}");
-            out.flush();
+            response.getWriter().write(jsonObject.toJSONString());
         } catch (ForbiddenExceptionUtil fe) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }

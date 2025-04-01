@@ -11,7 +11,7 @@ import com.example.bsu.utils.BadRequestExceptionUtil;
 import java.util.List;
 
 public class WatcherService {
-    public static List<UserTodo> findByTodoId(User author,int todoId) throws BadRequestExceptionUtil {
+    public static List<UserTodo> findByTodoId(User author,  int todoId) throws BadRequestExceptionUtil {
         Todo todo = TodoDao.findById(todoId);
         if(todo.getUser().getId() != author.getId()) {
             throw new BadRequestExceptionUtil();

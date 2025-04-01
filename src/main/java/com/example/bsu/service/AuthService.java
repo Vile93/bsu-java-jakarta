@@ -29,6 +29,12 @@ public class AuthService {
             response.getWriter().write("{\"message\":\"Email already in use\"}");
             return;
         }
+        dbUser = UserDao.findByUsername(authRequestRegister.getUsername());
+        if (dbUser != null) {
+            response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"Username already in use\"}");
+        }
         String encryptedPassword = BcryptService.encrypt(newUser.getPassword());
         newUser.setPassword(encryptedPassword);
         UserDao.save(newUser);
