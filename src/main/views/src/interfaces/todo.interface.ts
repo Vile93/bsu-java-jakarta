@@ -1,6 +1,7 @@
 export interface Todo {
-    id?: number;
+    id: number;
     title: string;
     description?: string;
-    imagePath?: string;
+    imagePath?: string | null;
+    isUserTodo?: boolean;
 }

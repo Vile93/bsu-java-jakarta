@@ -51,3 +51,7 @@ export const todoModel = Schema.Model({
         'Maximum description length is 200 characters'
     ),
 });
+
+export const POST_IMAGE_PATH = 'http://localhost:8080/app/api/images';
+
+export const IMAGE_PATH = 'http://localhost:8080/app/images/';

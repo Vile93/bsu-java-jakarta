@@ -1,13 +1,10 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form, Input, Uploader } from 'rsuite';
-import { todoModel } from '../../../constants';
+import { POST_IMAGE_PATH, todoModel } from '../../../constants';
 import { useFetch } from '../../../hooks/useFetch.hook';
 import { createTodo } from '../../../services/todo.service';
 import { ToastContext } from '../../../contexts/ToastContext';
-
-interface CreateTodoProps {
-    setIsRefetch: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { RefetchTodosContext } from '../../../contexts/RefetchTodosContext';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Textarea = React.forwardRef((props, ref: any) => (
@@ -20,7 +17,8 @@ const Textarea = React.forwardRef((props, ref: any) => (
     />
 ));
 
-const CreateTodo: FC<CreateTodoProps> = ({ setIsRefetch }) => {
+const CreateTodo = () => {
+    const refetchTodosContext = useContext(RefetchTodosContext);
     const toastContext = useContext(ToastContext);
     const postTodo = useFetch(createTodo);
     const [imageId, setImageId] = useState<string | null>(null);
@@ -32,7 +30,7 @@ const CreateTodo: FC<CreateTodoProps> = ({ setIsRefetch }) => {
     useEffect(() => {
         if (postTodo.isSuccessCompleted) {
             toastContext?.notify('Todo was created', 'success');
-            setIsRefetch(true);
+            refetchTodosContext?.setIsRefetch(true);
         }
     }, [postTodo.isSuccessCompleted]);
     return (
@@ -67,7 +65,7 @@ const CreateTodo: FC<CreateTodoProps> = ({ setIsRefetch }) => {
                 </Form.Group>
 
                 <Uploader
-                    action="http://localhost:8080/app/api/images"
+                    action={POST_IMAGE_PATH}
                     multiple={true}
                     onSuccess={(res) => setImageId(res?.message)}
                     accept=".png,.jpg"

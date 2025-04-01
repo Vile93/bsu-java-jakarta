@@ -1,13 +1,9 @@
-import { Button } from "rsuite";
-import { useFetch } from "../../../hooks/useFetch.hook";
-import {
-    deleteProfile,
-    editProfile,
-    getProfile,
-} from "../../../services/user.service";
-import { useContext, useEffect } from "react";
-import { ToastContext } from "../../../contexts/ToastContext";
-import { AuthContext } from "../../../contexts/AuthContext";
+import { Button } from 'rsuite';
+import { useFetch } from '../../../hooks/useFetch.hook';
+import { deleteProfile } from '../../../services/user.service';
+import { useContext, useEffect } from 'react';
+import { ToastContext } from '../../../contexts/ToastContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 const DeleteProfile = () => {
     const deleteUser = useFetch(deleteProfile);
@@ -15,13 +11,13 @@ const DeleteProfile = () => {
     const authContext = useContext(AuthContext);
     useEffect(() => {
         if (deleteUser.isSuccessCompleted) {
-            toastContext?.notify("User deleted", "success");
+            toastContext?.notify('User deleted', 'success');
             authContext?.setIsAuth(false);
         }
     }, [deleteUser.isSuccessCompleted]);
     return (
         <Button
-            onClick={() => deleteUser.fetchData(false)}
+            onClick={() => deleteUser.fetchData()}
             appearance="primary"
             color="red"
         >

@@ -1,15 +1,26 @@
-import { FC } from "react";
-import { Button, Modal } from "rsuite";
+import { FC, useEffect } from 'react';
+import { Button, Modal } from 'rsuite';
+import { useDeleteTodo } from '../hooks/useDeleteTodo.hook';
 
-interface DeleteModalProps {
+interface DeleteTodoModalProps {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    id: string;
 }
 
-const DeleteModal: FC<DeleteModalProps> = ({ open, setOpen }) => {
+const DeleteTodoModal: FC<DeleteTodoModalProps> = ({ open, setOpen, id }) => {
     const handleClose = () => {
         setOpen(false);
     };
+    const removeTodo = useDeleteTodo(id);
+    const handleDelete = () => {
+        removeTodo.fetchDelete();
+    };
+    useEffect(() => {
+        if (removeTodo.isSuccess) {
+            setOpen(false);
+        }
+    }, [removeTodo.isSuccess]);
     return (
         <Modal open={open} onClose={handleClose}>
             <Modal.Header>
@@ -24,7 +35,7 @@ const DeleteModal: FC<DeleteModalProps> = ({ open, setOpen }) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button
-                    onClick={handleClose}
+                    onClick={handleDelete}
                     appearance="primary"
                     color="green"
                 >
@@ -38,4 +49,4 @@ const DeleteModal: FC<DeleteModalProps> = ({ open, setOpen }) => {
     );
 };
 
-export default DeleteModal;
+export default DeleteTodoModal;

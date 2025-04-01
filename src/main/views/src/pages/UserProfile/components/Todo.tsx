@@ -3,16 +3,17 @@ import EditIcon from '@rsuite/icons/Edit';
 import CloseIcon from '@rsuite/icons/Close';
 import { useNavigate } from 'react-router-dom';
 import React, { FC, useState } from 'react';
-import EditModal from '../../../components/EditModal';
-import DeleteModal from '../../../components/DeleteModal';
+import EditModal from '../../../components/EditTodoModal';
+import DeleteTodoModal from '../../../components/DeleteTodoModal';
 
 interface TodoProps {
     isEditable?: boolean;
     title: string;
     description?: string;
+    id: string;
 }
 
-const Todo: FC<TodoProps> = ({ isEditable, description, title }) => {
+const Todo: FC<TodoProps> = ({ isEditable, description, title, id }) => {
     const navigate = useNavigate();
     const [openEditModal, setOpenEditModal] = useState<boolean>(false);
     const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const Todo: FC<TodoProps> = ({ isEditable, description, title }) => {
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
         if (!target.closest('.edit') && !target.closest('.delete')) {
-            navigate('/app/todos/1');
+            navigate(`/app/todos/${id}`);
         }
     };
     if (!isEditable) {
@@ -55,8 +56,13 @@ const Todo: FC<TodoProps> = ({ isEditable, description, title }) => {
                         </Button>
                     </div>
                 </div>
-                <EditModal open={openEditModal} setOpen={setOpenEditModal} />
-                <DeleteModal
+                <EditModal
+                    open={openEditModal}
+                    setOpen={setOpenEditModal}
+                    id={id}
+                />
+                <DeleteTodoModal
+                    id={id}
                     open={openDeleteModal}
                     setOpen={setOpenDeleteModal}
                 />
