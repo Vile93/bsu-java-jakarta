@@ -1,13 +1,20 @@
-import { API } from './main.service';
+import { setQuery } from "../utils/setQuery.utils";
+import { API } from "./main.service";
 
-export const getWatchers = () => {
-    return API.get('/watchers');
+export const getWatchers = (todoId: string) => {
+    return API.get("/watchers" + setQuery({ todoId }));
 };
 
-export const createWatcher = () => {
-    return API.post('/watchers');
+export const createWatcher = (data: {
+    todoId: string | number;
+    username: string;
+}) => {
+    return API.post("/watchers" + setQuery(data));
 };
 
-export const deleteWatcher = () => {
-    return API.delete('/watchers');
+export const deleteWatcher = (data: {
+    todoId: string | number;
+    username: string;
+}) => {
+    return API.delete("/watchers" + setQuery(data));
 };

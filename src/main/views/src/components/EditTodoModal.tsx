@@ -1,12 +1,14 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Button, Form, Input, Modal, Uploader } from 'rsuite';
-import { POST_IMAGE_PATH, todoModel } from '../constants';
-import { useEditTodo } from '../hooks/useEditTodo.hook';
+import React, { FC, useEffect, useState } from "react";
+import { Button, Form, Input, Modal, Uploader } from "rsuite";
+import { POST_IMAGE_PATH, todoModel } from "../constants";
+import { useEditTodo } from "../hooks/useEditTodo.hook";
+import { Todo } from "../interfaces/todo.interface";
 
 interface EditTodoModalProps {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    id: string;
+    data: Todo;
+    setIsSuccessEdited?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -20,28 +22,42 @@ const Textarea = React.forwardRef((props, ref: any) => (
     />
 ));
 
-const EditTodoModal: FC<EditTodoModalProps> = ({ open, setOpen }) => {
+const EditTodoModal: FC<EditTodoModalProps> = ({
+    open,
+    setOpen,
+    data,
+    setIsSuccessEdited,
+}) => {
     const [imageId, setImageId] = useState<string | null>(null);
     const handleClose = () => {
         setOpen(false);
     };
     const updateTodo = useEditTodo();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleEdit = (data: any) => {
-        console.log('clicked', data);
-        updateTodo.fetchUpdate({
-            ...data,
-            imagePath: imageId,
-        });
-    };
+
     useEffect(() => {
         if (updateTodo.isSuccess) {
+            if (setIsSuccessEdited) {
+                setIsSuccessEdited(true);
+            }
             setOpen(false);
         }
     }, [updateTodo.isSuccess]);
     return (
-        <Form model={todoModel} onSubmit={(data) => console.log(data)}>
-            <Modal open={open} onClose={handleClose}>
+        <Modal open={open} onClose={handleClose}>
+            <Form
+                formDefaultValue={{
+                    description: data?.description ?? "",
+                    title: data.title,
+                }}
+                model={todoModel}
+                onSubmit={(formData: any) =>
+                    updateTodo.fetchUpdate({
+                        ...formData,
+                        imagePath: imageId ?? data?.imagePath,
+                        id: data.id,
+                    })
+                }
+            >
                 <Modal.Header>
                     <Modal.Title>
                         <div className="text-2xl font-bold"> Edit todo</div>
@@ -83,19 +99,15 @@ const EditTodoModal: FC<EditTodoModalProps> = ({ open, setOpen }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
-                        appearance="primary"
-                        type="submit"
-                        onClick={() => console.log('clicked')}
-                    >
+                    <Button appearance="primary" type="submit">
                         Edit
                     </Button>
                     <Button onClick={handleClose} appearance="subtle">
                         Cancel
                     </Button>
                 </Modal.Footer>
-            </Modal>
-        </Form>
+            </Form>
+        </Modal>
     );
 };
 

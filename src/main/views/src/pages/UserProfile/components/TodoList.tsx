@@ -1,10 +1,10 @@
-import { useContext, useEffect } from 'react';
-import Todo from './Todo';
-import { useFetch } from '../../../hooks/useFetch.hook';
-import { fetchTodos } from '../../../services/todo.service';
-import Loader from '../../../components/Loader';
-import { Todo as ITodo } from '../../../interfaces/todo.interface';
-import { RefetchTodosContext } from '../../../contexts/RefetchTodosContext';
+import { useContext, useEffect } from "react";
+import Todo from "./Todo";
+import { useFetch } from "../../../hooks/useFetch.hook";
+import { fetchTodos } from "../../../services/todo.service";
+import Loader from "../../../components/Loader";
+import { Todo as ITodo } from "../../../interfaces/todo.interface";
+import { RefetchTodosContext } from "../../../contexts/RefetchTodosContext";
 
 const TodoList = () => {
     const refetchTodosContext = useContext(RefetchTodosContext);
@@ -26,13 +26,14 @@ const TodoList = () => {
         <div className="grow-1 flex flex-col gap-4 mb-4">
             {getTodos.isLoading ? <Loader /> : null}
             {getTodos.data
-                ? (getTodos.data as ITodo[]).map((todo) => (
+                ? (getTodos.data as ITodo[])?.map((todo) => (
                       <Todo
                           isEditable={false}
                           key={todo?.id}
                           id={todo.id.toString()}
                           description={todo.description}
                           title={todo.title}
+                          imagePath={todo?.imagePath ?? null}
                       />
                   ))
                 : null}
