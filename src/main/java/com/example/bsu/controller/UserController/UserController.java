@@ -26,7 +26,6 @@ public class UserController extends HttpServlet {
         jsonObject.put("name", user.getName());
         jsonObject.put("email", user.getEmail());
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().print(jsonObject.toJSONString());
     }
@@ -39,7 +38,6 @@ public class UserController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         } catch (ValidationFailedExceptionUtil ve) {
             response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
-            response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().write(ve.getJSONMessage());
         }

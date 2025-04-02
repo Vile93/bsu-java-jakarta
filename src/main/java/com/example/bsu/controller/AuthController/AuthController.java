@@ -44,7 +44,6 @@ public class AuthController extends HttpServlet {
             }
         } catch (ValidationFailedExceptionUtil ve) {
             response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
-            response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().write(ve.getJSONMessage());
         }

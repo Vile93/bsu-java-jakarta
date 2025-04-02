@@ -19,7 +19,6 @@ public class MathController extends HttpServlet {
         MathService mathService = new MathService();
         double number = mathService.getTwice(mathRequest.getNumber());
         res.setContentType("application/json");
-        res.setCharacterEncoding("UTF-8");
         PrintWriter out = res.getWriter();
         String jsonResponse = String.format("{ \"number\": %f }", number);
         out.print(jsonResponse);

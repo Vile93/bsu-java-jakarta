@@ -21,14 +21,13 @@ public class WatcherService {
     public static void create(User author,String username, int todoId) throws BadRequestExceptionUtil {
         UserTodo userTodo = new UserTodo();
         Todo todo = TodoDao.findById(todoId);
-        if(todo.getUser().getId() != author.getId()) {
+        if(!todo.getUser().getId().equals(author.getId())) {
             throw new BadRequestExceptionUtil();
         }
         User user = UserDao.findByUsername(username);
-        if(user == null || user.getId() == author.getId()) {
+        if(user == null || user.getId().equals(author.getId())) {
             throw new BadRequestExceptionUtil();
         }
-
         userTodo.setTodo(todo);
         userTodo.setUser(user);
         userTodo.setAuthor(author);

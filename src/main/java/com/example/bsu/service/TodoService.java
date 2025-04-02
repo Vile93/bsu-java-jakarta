@@ -43,7 +43,11 @@ public class TodoService {
         TodoDao.delete(todo);
     }
     public static void update(TodoRequest todoRequest,User user) throws ValidationFailedExceptionUtil,ForbiddenExceptionUtil {
-        if(user.getId() != todoRequest.getId()) {
+       Todo dbTodo = TodoDao.findById(todoRequest.getId());
+       if(dbTodo == null) {
+               throw  new ForbiddenExceptionUtil();
+       }
+        if(dbTodo.getId() != todoRequest.getId()) {
             throw new ForbiddenExceptionUtil();
         }
         Todo todo = new Todo();

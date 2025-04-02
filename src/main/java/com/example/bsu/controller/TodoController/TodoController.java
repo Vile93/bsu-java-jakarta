@@ -32,7 +32,6 @@ public class TodoController extends HttpServlet {
             jsonArray.add(jsonObject);
         }
         response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write(jsonArray.toJSONString());
     }
@@ -47,7 +46,6 @@ public class TodoController extends HttpServlet {
             jsonObject.put("imagePath", todo.getImagePath());
             jsonObject.put("isUserTodo", todo.getUser().getId().equals(session.getUser().getId()));
             response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonObject.toJSONString());
         } catch (ForbiddenExceptionUtil fe) {
@@ -71,7 +69,6 @@ public class TodoController extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_CREATED);
     } catch (ValidationFailedExceptionUtil ve) {
         response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
-        response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.getWriter().write(ve.getJSONMessage());
     }
@@ -85,7 +82,6 @@ public class TodoController extends HttpServlet {
            response.setStatus(HttpServletResponse.SC_OK);
        } catch (ValidationFailedExceptionUtil ve) {
            response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
-           response.setCharacterEncoding("UTF-8");
            response.setContentType("application/json");
            response.getWriter().write(ve.getJSONMessage());
        } catch (ForbiddenExceptionUtil fe) {
