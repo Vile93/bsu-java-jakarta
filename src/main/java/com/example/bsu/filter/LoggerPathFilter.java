@@ -12,8 +12,8 @@ import java.io.IOException;
 
 @Priority(3)
 @WebFilter("/*")
-public class LoggerFilter implements Filter {
-    private static  final Logger logger = LogManager.getLogger(LoggerFilter.class);
+public class LoggerPathFilter implements Filter {
+    private static  final Logger logger = LogManager.getLogger(LoggerPathFilter.class);
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {

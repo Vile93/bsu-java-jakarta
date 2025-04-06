@@ -13,7 +13,7 @@ import java.util.List;
 public class WatcherService {
     public static List<UserTodo> findByTodoId(User author,  int todoId) throws BadRequestExceptionUtil {
         Todo todo = TodoDao.findById(todoId);
-        if(todo.getUser().getId() != author.getId()) {
+        if(!todo.getUser().getId().equals(author.getId())) {
             throw new BadRequestExceptionUtil();
         }
         return UserTodoDao.findByTodoId(todoId);
@@ -40,10 +40,10 @@ public class WatcherService {
     public static void deleteByUsername(User author, String username,int todoId) throws BadRequestExceptionUtil {
         User user = UserDao.findByUsername(username);
         Todo todo = TodoDao.findById(todoId);
-        if(todo.getUser().getId() != author.getId()) {
+        if(!todo.getUser().getId().equals(author.getId())) {
             throw new BadRequestExceptionUtil();
         }
-        if(user.getId() == author.getId()) {
+        if(user.getId().equals(author.getId())) {
             throw new BadRequestExceptionUtil();
         }
         UserTodoDao.delete(user.getId(), todoId);

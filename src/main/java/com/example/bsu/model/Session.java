@@ -19,12 +19,12 @@ public class Session {
     private String expiration;
 
     public Session() {
-        this.expiration = LocalDateTime.now().plusMinutes(15).toString();
+        this.expiration = LocalDateTime.now().plusDays(7).toString();
     }
     public Session(UUID id,User user) {
         this.id = id.toString();
         this.user = user;
-        this.expiration = LocalDateTime.now().plusMinutes(15).toString();
+        this.expiration = LocalDateTime.now().plusDays(7).toString();
     }
 
     public UUID getId() {

@@ -9,33 +9,32 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.BadRequestException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet("/api/watchers")
 public class WatcherController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Session userSession = (Session) request.getAttribute("session");
-        int todoId = Integer.parseInt(request.getParameter("todoId"));
-        List<UserTodo> userTodos = WatcherService.findByTodoId(userSession.getUser(),todoId);
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_OK);
-        PrintWriter out = response.getWriter();
-        out.print("[");
-        for(int i = 0; i < userTodos.size(); i++) {
-            UserTodo userTodo = userTodos.get(i);
-            out.print("{ \"username\": \"" + userTodo.getUser().getName() + "\"");
-            if(i == userTodos.size() - 1) {
-                out.print("}");
-            } else {
-                out.print("},");
+        try {
+            Session userSession = (Session) request.getAttribute("session");
+            int todoId = Integer.parseInt(request.getParameter("todoId"));
+            List<UserTodo> userTodos = WatcherService.findByTodoId(userSession.getUser(), todoId);
+            JSONArray jsonArray = new JSONArray();
+            for(int i = 0; i < userTodos.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                UserTodo userTodo = userTodos.get(i);
+                jsonObject.put("username", userTodo.getUser().getName());
+                jsonArray.add(jsonObject);
             }
+            response.setContentType("application/json");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write(jsonArray.toJSONString());
+        } catch (BadRequestExceptionUtil e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-        out.print("]");
-        out.flush();
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {

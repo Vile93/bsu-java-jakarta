@@ -10,6 +10,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
 
@@ -26,11 +27,11 @@ public class ErrorHandlerFilter implements Filter {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             e.printStackTrace();
             logger.error(e.toString());
-            String jsonResponse = "{ \"message\" : " + e.getMessage() + "}";
-            httpResponse.setCharacterEncoding("UTF-8");
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("message", e.getMessage());
             httpResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             httpResponse.setContentType("application/json");
-            httpResponse.getWriter().write(jsonResponse);
+            httpResponse.getWriter().write(jsonObject.toJSONString());
             httpResponse.getWriter().flush();
         }
     }

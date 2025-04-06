@@ -74,4 +74,17 @@ public class UserTodoDao {
             session.close();
         }
     }
+    public  static void deleteAllByTodo(Todo todo) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.createQuery("DELETE FROM UserTodo ut WHERE ut.todo.id = :todoId").setParameter("todoId", todo.getId()).executeUpdate();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback();
+        } finally {
+            session.close();
+        }
+    }
 }

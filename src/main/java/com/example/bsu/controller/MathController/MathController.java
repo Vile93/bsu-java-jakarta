@@ -7,30 +7,29 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/api/math/*")
 public class MathController extends HttpServlet {
     private void doCompute(HttpServletRequest req,HttpServletResponse res) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         MathRequest mathRequest = mapper.readValue(req.getReader(), MathRequest.class);
-        MathService mathService = new MathService();
-        double number = mathService.getTwice(mathRequest.getNumber());
+        double number = MathService.getTwice(mathRequest.getNumber());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("number", number);
         res.setContentType("application/json");
-        PrintWriter out = res.getWriter();
-        String jsonResponse = String.format("{ \"number\": %f }", number);
-        out.print(jsonResponse);
-        out.flush();
+        res.setStatus(HttpServletResponse.SC_OK);
+        res.getWriter().write(jsonObject.toJSONString());
     }
 
-    protected  void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String path = req.getPathInfo();
        if("/twice".equals(path)) {
            doCompute(req,res);
        } else {
-           res.sendError(HttpServletResponse.SC_NOT_FOUND);
+           res.setStatus(HttpServletResponse.SC_NOT_FOUND);
        }
     }
 }

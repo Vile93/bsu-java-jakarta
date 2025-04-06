@@ -34,11 +34,11 @@ public class AuthService {
             response.setStatus(HttpServletResponse.SC_UNPROCESSABLE_CONTENT);
             response.setContentType("application/json");
             response.getWriter().write("{\"message\":\"Username already in use\"}");
+            return;
         }
         String encryptedPassword = BcryptService.encrypt(newUser.getPassword());
         newUser.setPassword(encryptedPassword);
         UserDao.save(newUser);
-        response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
     public static void login(HttpServletResponse response,AuthRequestLogin authRequestLogin) throws IOException {
@@ -49,7 +49,6 @@ public class AuthService {
         if(dbUser == null) {
             String jsonResponse = "{ \"message\": \"username not found\"}";
             response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             response.getWriter().write(jsonResponse);
             response.getWriter().flush();
@@ -59,7 +58,6 @@ public class AuthService {
         if(!isCorrectPassword) {
             String jsonResponse = "{ \"message\": \"wrong password\"}";
             response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(jsonResponse);
             response.getWriter().flush();
@@ -71,7 +69,6 @@ public class AuthService {
         sessionCookie.setHttpOnly(true);
         sessionCookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(sessionCookie);
-        response.setCharacterEncoding("UTF-8");
         response.getWriter().write("{ \"isVerified\": \"" + dbUser.isVerified() + "\"}" );
         response.setStatus(HttpServletResponse.SC_OK);
     }
@@ -79,7 +76,6 @@ public class AuthService {
         Cookie session = CookieService.getCookie(request,"session");
         if(session == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().write("{ \"message\": \"session not found\"}");
             return;
@@ -87,7 +83,6 @@ public class AuthService {
         Session s = SessionDao.findById(UUID.fromString(session.getValue()));
         if(s == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             response.getWriter().write("{ \"message\": \"session not found\"}");
             return;

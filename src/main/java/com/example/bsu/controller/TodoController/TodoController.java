@@ -22,13 +22,15 @@ public class TodoController extends HttpServlet {
     private void getTodos(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Session session = (Session) request.getAttribute("session");
         JSONArray  jsonArray = new JSONArray();
-        List<Todo> todos = TodoService.findAllByUserId(session.getUser().getId());
+        List<Todo> todos = TodoService.findAllByUserId(session.getUser());
         for(int i = 0; i < todos.size(); i++) {
             Todo todo = todos.get(i);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("id", todo.getId());
             jsonObject.put("title", todo.getTitle());
             jsonObject.put("description", todo.getDescription());
+            jsonObject.put("imagePath", todo.getImagePath());
+            jsonObject.put("isUserTodo", todo.getUser().getId().equals(session.getUser().getId()));
             jsonArray.add(jsonObject);
         }
         response.setContentType("application/json");

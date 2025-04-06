@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/api/users")
 public class UserController extends HttpServlet {

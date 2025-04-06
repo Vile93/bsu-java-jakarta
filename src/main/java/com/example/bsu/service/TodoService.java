@@ -12,12 +12,15 @@ import com.example.bsu.utils.ValidationFailedExceptionUtil;
 import java.util.List;
 
 public class TodoService {
-    public static List<Todo> findAllByUserId(int userId) {
-        return TodoDao.findAllByUserId(userId);
+    public static List<Todo> findAllByUserId(User user) {
+        List<Todo> todos = TodoDao.findAllByUserId(user.getId());
+        List<Todo> relatedTodos = UserTodoDao.findByUser(user).stream().map(userTodo -> userTodo.getTodo()).toList();
+        todos.addAll(relatedTodos);
+        return todos;
     }
     public static Todo findById(int todoId, User user) throws ForbiddenExceptionUtil {
         Todo todo = TodoDao.findById(todoId);
-        if(todo.getUser().getId() != user.getId()) {
+        if(!todo.getUser().getId().equals(user.getId())) {
             UserTodo userTodo = UserTodoDao.findByUserAndTodoId(user, todo);
             if(userTodo == null) {
                 throw new ForbiddenExceptionUtil();
@@ -37,9 +40,10 @@ public class TodoService {
     }
     public static void delete(int todoId, int userId) throws ForbiddenExceptionUtil {
         Todo todo = TodoDao.findById(todoId);
-        if(todo.getUser().getId() != userId) {
+        if(!todo.getUser().getId().equals(userId)) {
             throw new ForbiddenExceptionUtil();
         }
+        UserTodoDao.deleteAllByTodo(todo);
         TodoDao.delete(todo);
     }
     public static void update(TodoRequest todoRequest,User user) throws ValidationFailedExceptionUtil,ForbiddenExceptionUtil {
@@ -47,7 +51,7 @@ public class TodoService {
        if(dbTodo == null) {
                throw  new ForbiddenExceptionUtil();
        }
-        if(dbTodo.getId() != todoRequest.getId()) {
+        if(!dbTodo.getUser().getId().equals(user.getId())) {
             throw new ForbiddenExceptionUtil();
         }
         Todo todo = new Todo();

@@ -26,7 +26,7 @@ public class AuthController extends HttpServlet {
         AuthService.register(response, authRequestRegister);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String path = request.getPathInfo();
             switch (path) {

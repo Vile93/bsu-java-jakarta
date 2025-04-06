@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
 @Priority(1)
 @WebFilter("/*")
@@ -26,10 +25,6 @@ public class CORSFilter implements Filter {
         res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, HEAD, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "*, Content-Type, origin, accept, authorization");
         res.setHeader("Access-Control-Allow-Credentials", "true");
-        Logger logger = Logger.getLogger("CORSFilter");
-        logger.info("-----------------------------");
-        logger.info(req.getMethod());
-        logger.info("-------------------------------");
         if (req.getMethod().equals("OPTIONS"))
         {
             res.setStatus(HttpServletResponse.SC_ACCEPTED);

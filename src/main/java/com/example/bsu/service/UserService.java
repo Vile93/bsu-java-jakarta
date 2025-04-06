@@ -1,10 +1,7 @@
 package com.example.bsu.service;
 
 import com.example.bsu.controller.UserController.UserRequestUpdate;
-import com.example.bsu.dao.MailDao;
-import com.example.bsu.dao.SessionDao;
-import com.example.bsu.dao.TodoDao;
-import com.example.bsu.dao.UserDao;
+import com.example.bsu.dao.*;
 import com.example.bsu.model.User;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
@@ -16,6 +13,7 @@ public class UserService {
     public static void delete(User user) {
         MailDao.deleteAllByUser(user);
         SessionDao.deleteAll(user.getId());
+        UserTodoDao.deleteAll(user);
         TodoDao.deleteAll(user.getId());
         UserDao.delete(user);
     }
