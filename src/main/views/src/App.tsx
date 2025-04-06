@@ -28,6 +28,18 @@ function App() {
                 }
             />
             <Route path="/app" element={<MainLayout />}>
+                <Route
+                    path="/app"
+                    element={
+                        <Navigate
+                            to={
+                                authContext?.isAuth
+                                    ? '/app/user'
+                                    : '/app/auth/login'
+                            }
+                        />
+                    }
+                />
                 <Route path="/app/auth">
                     <Route element={<UnauthLayout />}>
                         <Route

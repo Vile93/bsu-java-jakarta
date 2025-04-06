@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import { Button } from "rsuite";
-import EditModal from "../components/EditTodoModal";
-import { useFetch } from "../hooks/useFetch.hook";
-import { fetchTodo } from "../services/todo.service";
-import { useParams } from "react-router-dom";
-import { Todo } from "../interfaces/todo.interface";
-import Loader from "../components/Loader";
-import { IMAGE_PATH } from "../constants";
-import DeleteTodoModal from "../components/DeleteTodoModal";
-import NotFoundpage from "./NotFoundpage";
-import InviteTodoModal from "../components/InviteTodoModal";
-import { getWatchers } from "../services/watcher.service";
+import { useEffect, useState } from 'react';
+import { Button } from 'rsuite';
+import EditModal from '../components/EditTodoModal';
+import { useFetch } from '../hooks/useFetch.hook';
+import { fetchTodo } from '../services/todo.service';
+import { useParams } from 'react-router-dom';
+import { Todo } from '../interfaces/todo.interface';
+import Loader from '../components/Loader';
+import { IMAGE_PATH } from '../constants';
+import DeleteTodoModal from '../components/DeleteTodoModal';
+import NotFoundpage from './NotFoundpage';
+import InviteTodoModal from '../components/InviteTodoModal';
+import { getWatchers } from '../services/watcher.service';
 
 const UserTodopage = () => {
     const [isSuccessEdited, setIsSuccessEdited] = useState(false);
@@ -40,7 +40,6 @@ const UserTodopage = () => {
     }, [isRefetchInvitedUsers]);
     useEffect(() => {
         getTodo.fetchData();
-        getInvitedUsers.fetchData();
     }, []);
     useEffect(() => {
         if (isSuccessEdited) {
@@ -51,10 +50,14 @@ const UserTodopage = () => {
     useEffect(() => {
         if (getTodo.data) {
             setData(getTodo.data);
+            if ((getTodo.data as Todo).isUserTodo) {
+                getInvitedUsers.fetchData();
+            }
         }
     }, [getTodo.data]);
     if (getTodo.errorData?.status) return <NotFoundpage />;
-    if (!data || !getInvitedUsers.data) return <Loader />;
+    if (!data || (!getInvitedUsers.data && (getTodo.data as Todo).isUserTodo))
+        return <Loader />;
     return (
         <div className="mt-4">
             <div className="border-gray-200 border-2 rounded p-4 flex justify-between">

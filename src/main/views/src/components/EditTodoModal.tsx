@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
-import { Button, Form, Input, Modal, Uploader } from "rsuite";
-import { POST_IMAGE_PATH, todoModel } from "../constants";
-import { useEditTodo } from "../hooks/useEditTodo.hook";
-import { Todo } from "../interfaces/todo.interface";
+import React, { FC, useEffect, useState } from 'react';
+import { Button, Form, Input, Modal, Uploader } from 'rsuite';
+import { POST_IMAGE_PATH, todoModel } from '../constants';
+import { useEditTodo } from '../hooks/useEditTodo.hook';
+import { Todo } from '../interfaces/todo.interface';
 
 interface EditTodoModalProps {
     open: boolean;
@@ -42,14 +42,16 @@ const EditTodoModal: FC<EditTodoModalProps> = ({
             setOpen(false);
         }
     }, [updateTodo.isSuccess]);
+    console.log(data?.imagePath);
     return (
         <Modal open={open} onClose={handleClose}>
             <Form
                 formDefaultValue={{
-                    description: data?.description ?? "",
+                    description: data?.description ?? '',
                     title: data.title,
                 }}
                 model={todoModel}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onSubmit={(formData: any) =>
                     updateTodo.fetchUpdate({
                         ...formData,

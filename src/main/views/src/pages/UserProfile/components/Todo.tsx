@@ -1,10 +1,10 @@
-import { Button } from "rsuite";
-import EditIcon from "@rsuite/icons/Edit";
-import CloseIcon from "@rsuite/icons/Close";
-import { useNavigate } from "react-router-dom";
-import React, { FC, useState } from "react";
-import EditModal from "../../../components/EditTodoModal";
-import DeleteTodoModal from "../../../components/DeleteTodoModal";
+import { Button } from 'rsuite';
+import EditIcon from '@rsuite/icons/Edit';
+import CloseIcon from '@rsuite/icons/Close';
+import { useNavigate } from 'react-router-dom';
+import React, { FC, useState } from 'react';
+import EditModal from '../../../components/EditTodoModal';
+import DeleteTodoModal from '../../../components/DeleteTodoModal';
 
 interface TodoProps {
     isEditable?: boolean;
@@ -32,11 +32,11 @@ const Todo: FC<TodoProps> = ({
     };
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         const target = e.target as HTMLDivElement;
-        if (!target.closest(".edit") && !target.closest(".delete")) {
+        if (!target.closest('.edit') && !target.closest('.delete')) {
             navigate(`/app/todos/${id}`);
         }
     };
-    if (!isEditable) {
+    if (isEditable) {
         return (
             <>
                 <div
@@ -46,7 +46,7 @@ const Todo: FC<TodoProps> = ({
                     <div className="flex flex-col">
                         <div className="text-2xl font-bold">{title}</div>
                         <div className="text-lg whitespace-pre">
-                            {description ?? ""}
+                            {description ?? ''}
                         </div>
                     </div>
                     <div className="flex gap-4">
@@ -86,7 +86,7 @@ const Todo: FC<TodoProps> = ({
             <div className="hover:bg-green-300 hover:cursor-pointer transition-colors duration-300 border-green-100 border-2 p-4 rounded bg-green-200">
                 <div className="text-2xl font-bold">{title}</div>
                 <div className="text-lg whitespace-pre">
-                    {description ?? ""}
+                    {description ?? ''}
                 </div>
             </div>
         </div>

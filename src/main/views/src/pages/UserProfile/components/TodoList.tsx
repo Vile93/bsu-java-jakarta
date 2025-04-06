@@ -1,10 +1,10 @@
-import { useContext, useEffect } from "react";
-import Todo from "./Todo";
-import { useFetch } from "../../../hooks/useFetch.hook";
-import { fetchTodos } from "../../../services/todo.service";
-import Loader from "../../../components/Loader";
-import { Todo as ITodo } from "../../../interfaces/todo.interface";
-import { RefetchTodosContext } from "../../../contexts/RefetchTodosContext";
+import { useContext, useEffect } from 'react';
+import Todo from './Todo';
+import { useFetch } from '../../../hooks/useFetch.hook';
+import { fetchTodos } from '../../../services/todo.service';
+import Loader from '../../../components/Loader';
+import { Todo as ITodo } from '../../../interfaces/todo.interface';
+import { RefetchTodosContext } from '../../../contexts/RefetchTodosContext';
 
 const TodoList = () => {
     const refetchTodosContext = useContext(RefetchTodosContext);
@@ -28,7 +28,7 @@ const TodoList = () => {
             {getTodos.data
                 ? (getTodos.data as ITodo[])?.map((todo) => (
                       <Todo
-                          isEditable={false}
+                          isEditable={todo.isUserTodo}
                           key={todo?.id}
                           id={todo.id.toString()}
                           description={todo.description}
