@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Priority(4)
+@Priority(5)
 @WebFilter(urlPatterns = {"/api/users/*", "/api/todos/*", "/api/mail/*", "/api/watchers/*"} )
 public class AuthFilter implements Filter {
 

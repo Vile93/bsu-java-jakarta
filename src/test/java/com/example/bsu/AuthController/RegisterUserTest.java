@@ -1,4 +1,4 @@
-package com.example.bsu;
+package com.example.bsu.AuthController;
 
 import com.example.bsu.controller.AuthController.AuthController;
 import com.example.bsu.dao.UserDao;
@@ -7,23 +7,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-public class AuthControllerTest extends Mockito {
+public class RegisterUserTest extends Mockito {
+    @Before
+    public void setUp() throws Exception {
+        User user = UserDao.findByUsername("user");
+        if (user != null) {
+            UserDao.delete(user);
+        }
+    }
 
     @Test
-    public void registerUser() throws Exception {
+    public void test() throws Exception {
         HttpServletRequest req = mock(HttpServletRequest.class);
         HttpServletResponse resp = mock(HttpServletResponse.class);
         JSONObject requestJSON = new JSONObject();
-        User user = UserDao.findByUsername("user");
-        if(user != null) {
-            UserDao.delete(user);
-        }
 
         requestJSON.put("username", "user");
         requestJSON.put("password", "password");
@@ -37,31 +41,10 @@ public class AuthControllerTest extends Mockito {
 
     }
 
-
-    @Test
-    public void registerUserWithDuplicateUsername() throws Exception {
-        HttpServletRequest req = mock(HttpServletRequest.class);
-        HttpServletResponse resp = mock(HttpServletResponse.class);
-        JSONObject requestJSON = new JSONObject();
-        User user = UserDao.findByUsername("user");
-        if(user == null) {
-            User newUser = new User();
-            newUser.setEmail("user@example.com");
-            newUser.setPassword("password");
-            newUser.setName("user");
-            UserDao.save(newUser);
-        }
-        // TODO
-    }
-
     @After
     public void tearDown() throws Exception {
         User user = UserDao.findByUsername("user");
-        if(user != null) {
-            UserDao.delete(user);
-        }
-        user = UserDao.findByEmail("user@example.com");
-        if(user != null) {
+        if (user != null) {
             UserDao.delete(user);
         }
     }

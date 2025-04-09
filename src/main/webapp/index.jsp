@@ -3,10 +3,10 @@
 <html>
 <head>
     <title>BSU JAVA JAKARTA</title>
-<%--    <link rel="stylesheet" href="views/dist/index.css">--%>
+    <link rel="stylesheet" crossorigin href="http://localhost:8080/app/index.css">
+    <script type="module" crossorigin src="http://localhost:8080/app/index.js"></script>
 </head>
 <body>
-<div id="root"></div>
-<%--<script src="views/dist/index.js"></script>--%>
+    <div id="root"></div>
 </body>
 </html>
