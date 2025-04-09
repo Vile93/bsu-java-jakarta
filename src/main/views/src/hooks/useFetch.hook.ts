@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosError } from "axios";
-import { useContext, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { getProfile } from "../services/user.service";
+import { AxiosError } from 'axios';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
 
 export const useFetch = (callback: (...args) => any, ...args: any[]) => {
     const [data, setData] = useState<any>();

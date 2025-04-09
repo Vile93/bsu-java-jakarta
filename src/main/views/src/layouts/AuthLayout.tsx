@@ -1,12 +1,12 @@
-import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
-import HeaderLink from "./components/HeaderLink";
-import { Button } from "rsuite";
-import { useFetch } from "../hooks/useFetch.hook";
-import { logout } from "../services/auth.service";
-import { useContext, useEffect } from "react";
-import { ToastContext } from "../contexts/ToastContext";
-import { AuthContext } from "../contexts/AuthContext";
+import { Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import HeaderLink from './components/HeaderLink';
+import { Button } from 'rsuite';
+import { useFetch } from '../hooks/useFetch.hook';
+import { logout } from '../services/auth.service';
+import { useContext, useEffect } from 'react';
+import { ToastContext } from '../contexts/ToastContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 const AuthLayout = () => {
     const fetchLogout = useFetch(logout);
@@ -15,7 +15,7 @@ const AuthLayout = () => {
 
     useEffect(() => {
         if (fetchLogout.isSuccessCompleted) {
-            toastContext?.notify("Successful exit", "success");
+            toastContext?.notify('Successful exit', 'success');
             authContext?.setIsAuth(false);
         }
     }, [fetchLogout.isSuccessCompleted]);
@@ -25,7 +25,7 @@ const AuthLayout = () => {
                 <HeaderLink text="Profile" to="/app/user" />
                 <Button
                     onClick={() => {
-                        fetchLogout.fetchData(false);
+                        fetchLogout.fetchData();
                     }}
                     className="font-bold"
                     appearance="primary"

@@ -1,8 +1,8 @@
-import React, { FC, useContext, useEffect } from "react";
-import { Button, ButtonGroup, Form, Modal } from "rsuite";
-import { useFetch } from "../hooks/useFetch.hook";
-import { createWatcher, deleteWatcher } from "../services/watcher.service";
-import { ToastContext } from "../contexts/ToastContext";
+import React, { FC, useContext, useEffect } from 'react';
+import { Button, Form, Modal } from 'rsuite';
+import { useFetch } from '../hooks/useFetch.hook';
+import { createWatcher, deleteWatcher } from '../services/watcher.service';
+import { ToastContext } from '../contexts/ToastContext';
 
 interface InviteTodoModalProps {
     open: boolean;
@@ -40,7 +40,7 @@ const InviteTodoModal: FC<InviteTodoModalProps> = ({
     }, [deleteInvitedUser.newArgs]);
     useEffect(() => {
         if (deleteInvitedUser.isSuccessCompleted) {
-            toastContext?.notify("User was deleted", "success");
+            toastContext?.notify('User was deleted', 'success');
             if (setRefetchInvitedUsers) {
                 setRefetchInvitedUsers(true);
             }
@@ -53,9 +53,9 @@ const InviteTodoModal: FC<InviteTodoModalProps> = ({
     }, [inviteUser.newArgs]);
     useEffect(() => {
         if (inviteUser.isCompleted && !inviteUser.isSuccessCompleted) {
-            toastContext?.notify("Failed to invite user", "error");
+            toastContext?.notify('Failed to invite user', 'error');
         } else if (inviteUser.isSuccessCompleted) {
-            toastContext?.notify("User was added", "success");
+            toastContext?.notify('User was added', 'success');
             if (setRefetchInvitedUsers) {
                 setRefetchInvitedUsers(true);
             }
