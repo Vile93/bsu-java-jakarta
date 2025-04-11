@@ -1,15 +1,16 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import UserProfilepage from './pages/UserProfile/UserProfilepage';
-import Loginpage from './pages/Loginpage';
-import ProtectedRoute from './components/ProtectedRoute';
-import MainLayout from './layouts/MainLayout';
-import Registerpage from './pages/Registerpage';
-import UnauthLayout from './layouts/UnauthLayout';
-import AuthLayout from './layouts/AuthLayout';
-import UnprotectedRoute from './components/UnprotectedRoute';
-import { useContext } from 'react';
-import { AuthContext } from './contexts/AuthContext';
-import UserTodopage from './pages/UserTodopage';
+import { Navigate, Route, Routes } from "react-router-dom";
+import UserProfilepage from "./pages/UserProfile/UserProfilepage";
+import Loginpage from "./pages/Loginpage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
+import Registerpage from "./pages/Registerpage";
+import UnauthLayout from "./layouts/UnauthLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import UnprotectedRoute from "./components/UnprotectedRoute";
+import { useContext } from "react";
+import { AuthContext } from "./contexts/AuthContext";
+import UserTodopage from "./pages/UserTodopage";
+import NotFoundpage from "./pages/NotFoundpage";
 
 function App() {
     const authContext = useContext(AuthContext);
@@ -21,8 +22,8 @@ function App() {
                     <Navigate
                         to={
                             authContext?.isAuth
-                                ? '/app/user'
-                                : '/app/auth/login'
+                                ? "/app/user"
+                                : "/app/auth/login"
                         }
                     />
                 }
@@ -34,8 +35,8 @@ function App() {
                         <Navigate
                             to={
                                 authContext?.isAuth
-                                    ? '/app/user'
-                                    : '/app/auth/login'
+                                    ? "/app/user"
+                                    : "/app/auth/login"
                             }
                         />
                     }
@@ -68,6 +69,16 @@ function App() {
                         element={<ProtectedRoute element={<UserTodopage />} />}
                     />
                 </Route>
+                <Route
+                    path="*"
+                    element={
+                        authContext?.isAuth ? (
+                            <NotFoundpage />
+                        ) : (
+                            <Navigate to={"/app/auth/login"} />
+                        )
+                    }
+                />
             </Route>
         </Routes>
     );
