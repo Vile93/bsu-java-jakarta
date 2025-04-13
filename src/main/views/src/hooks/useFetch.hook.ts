@@ -34,9 +34,7 @@ export const useFetch = (callback: (...args) => any, ...args: any[]) => {
             setIsSuccessCompleted(true);
         } catch (e) {
             setIsError(true);
-            console.log(e, e instanceof AxiosError);
             if (e instanceof AxiosError) {
-                console.log(e.response?.status);
                 setErrorData({
                     status: e.response?.status,
                     message: e.response?.data?.message,

@@ -42,7 +42,6 @@ const EditTodoModal: FC<EditTodoModalProps> = ({
             setOpen(false);
         }
     }, [updateTodo.isSuccess]);
-    console.log(data?.imagePath);
     return (
         <Modal open={open} onClose={handleClose}>
             <Form
