@@ -1,6 +1,28 @@
+FROM node:23.11.0-slim AS web_build
+
+WORKDIR /client
+
+COPY ./src/main/views/package*.json .
+RUN npm ci
+COPY ./src/main/views .
+RUN npm run build
+
+FROM maven:3.8.6-openjdk-18-slim AS server_build
+
+WORKDIR /server
+
+COPY ./src/main/webapp ./src/main/webapp
+COPY --from=web_build /client/dist/index.css ./src/main/webapp/
+COPY --from=web_build /client/dist/index.js ./src/main/webapp/
+COPY ./src/main/resources ./src/main/resources
+COPY ./src/main/java ./src/main/java
+COPY ./pom.xml .
+
+RUN mvn clean install
+
 FROM tomcat:10.0-jdk17
 
-COPY ./target/bsu-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/app.war
+COPY --from=server_build /server/target/*.war /usr/local/tomcat/webapps/app.war
 COPY ./.env /usr/local/tomcat
 
 CMD ["catalina.sh", "run"]
