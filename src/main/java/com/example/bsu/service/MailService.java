@@ -8,6 +8,7 @@ import com.example.bsu.model.User;
 import com.example.bsu.utils.MailUtil;
 import com.example.bsu.utils.ValidationFailedExceptionUtil;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class MailService {
@@ -19,9 +20,12 @@ public class MailService {
         }
         Mail mail = MailDao.findByUserId(session.getUser().getId());
         if(mail != null) {
+            Mail newMail = new Mail();
             UUID mailId = UUID.randomUUID();
-            mail.setVerificationCode(mailId);
-            MailDao.update(mail);
+            newMail.setVerificationCode(mailId);
+            newMail.setUser(mail.getUser());
+            newMail.setId(mail.getId());
+            MailDao.update(newMail);
             MailUtil.send(session.getUser().getEmail(),"Email verification","Your code: " + mailId + ". This code will expire in 15 minutes.");
             return;
         }
@@ -39,11 +43,14 @@ public class MailService {
         Mail mail = MailDao.findByUserId(session.getUser().getId());
         if(!mail.getVerificationCode().toString().equals(mailId.toString())) {
             throw new ValidationFailedExceptionUtil("Incorrect verification code");
-        } else {
-            User user = mail.getUser();
-            user.setVerified(true);
-            UserDao.update(user);
         }
-
+        LocalDateTime expiration = LocalDateTime.parse(mail.getExpiration());
+        LocalDateTime now = LocalDateTime.now();
+        if(expiration.isBefore(now)) {
+            throw new ValidationFailedExceptionUtil("This code is no longer valid.");
+        }
+        User user = mail.getUser();
+        user.setVerified(true);
+        UserDao.update(user);
     }
 }
